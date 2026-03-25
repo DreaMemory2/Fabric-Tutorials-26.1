@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import org.jetbrains.annotations.NotNull;
 
 public class ModModelDataGenerator extends FabricModelProvider {
 
@@ -18,7 +19,7 @@ public class ModModelDataGenerator extends FabricModelProvider {
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerators model) {
+    public void generateItemModels(@NotNull ItemModelGenerators model) {
 
     }
 }

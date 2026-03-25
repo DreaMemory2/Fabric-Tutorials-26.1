@@ -24,8 +24,8 @@ public class ModItemGroups {
                     .build());
 
     private static CreativeModeTab.DisplayItemsGenerator group() {
-        return (displayContext, containers) -> {
-            containers.accept(ModBlocks.RED_CRYSTAL.asItem());
+        return (context, entries) -> {
+            entries.accept(ModBlocks.RED_CRYSTAL.asItem());
         };
     }
 
