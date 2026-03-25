@@ -1,11 +1,11 @@
 {
 	"schemaVersion": 1,
-	"id": "crystal-mod",
+	"id": "crystal_mod",
 	"version": "${version}",
 	"name": "Crystal Mod",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"Me!"
+		"Crystal"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -34,7 +34,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.18.4",
-		"minecraft": "~26.1-",
+		"minecraft": "~26.1",
 		"java": ">=25",
 		"fabric-api": "*"
 	}
