@@ -11,6 +11,8 @@ import java.util.function.Function;
 
 public class ModItems {
 
+    public static final Item RUBY = register("ruby", Item::new, new Item.Properties());
+
     public static Item register(String name, Function<Item.Properties, Item> factory, Item.Properties properties) {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, CrystalMod.of(name));
         return Registry.register(BuiltInRegistries.ITEM, key, factory.apply(properties.setId(key)));

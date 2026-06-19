@@ -17,6 +17,5 @@ public class ModBlockTagDataGenerator extends FabricTagsProvider.BlockTagsProvid
 
     @Override
     protected void addTags(@NotNull Provider registries) {
-        getOrCreateRawBuilder(BlockTags.MINEABLE_WITH_PICKAXE).addElement(CrystalMod.of("red_crystal"));
     }
 }

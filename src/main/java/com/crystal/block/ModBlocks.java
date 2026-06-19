@@ -11,28 +11,25 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class ModBlocks {
-    public static final Block RED_CRYSTAL = register("red_crystal", Properties.ofFullCopy(Blocks.AMETHYST_BLOCK));
+    public static final Block FLUID_TANK = register("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
 
     private static Block register(String name, Properties properties) {
         return register(name, Block::new, properties);
     }
 
     public static Block register(String name, Function<Properties, Block> factory, Properties properties) {
-        ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, CrystalMod.of(name));
-        Block block = Registry.register(BuiltInRegistries.BLOCK, key, factory.apply(properties.setId(key)));
-        register(block, BlockItem::new, new Item.Properties());
-        return block;
-    }
-
-    public static void register(Block block, BiFunction<Block, Item.Properties, Item> factory, Item.Properties properties) {
-        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, block.builtInRegistryHolder().key().identifier());
-        Item item = factory.apply(block, properties.setId(key));
-        ((BlockItem) item).registerBlocks(Item.BY_BLOCK, item);
-        Registry.register(BuiltInRegistries.ITEM, key, item);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, CrystalMod.of(name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, CrystalMod.of(name));
+        // 通过属性构建方块
+        Block block = factory.apply(properties.setId(blockKey));
+        // 使用方块前缀作为物品方块名称，例如：block.crystalmod.stone
+        BlockItem blockItem = new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix());
+        // 注册方块和方块物品
+        Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem);
+        return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
     }
 
     public static void init() {

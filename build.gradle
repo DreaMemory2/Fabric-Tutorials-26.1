@@ -22,7 +22,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"crystal-mod" {
+		"crystalmod" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -34,6 +34,9 @@ fabricApi {
 	configureDataGeneration {
 		client = true
 	}
+	configureTests {
+		username = "Crystal"
+	}
 }
 
 dependencies {
@@ -44,6 +47,9 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Fabric Loader Junit: 针对 Minecraft 模组进行单元测试的 JUnit 插件
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 	
 }
 
@@ -53,6 +59,10 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version
 	}
+}
+
+test {
+	useJUnitPlatform()
 }
 
 tasks.withType(JavaCompile).configureEach {

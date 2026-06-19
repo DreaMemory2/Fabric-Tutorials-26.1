@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "crystal_mod",
+	"id": "crystalmod",
 	"version": "${version}",
 	"name": "Crystal Mod",
 	"description": "This is an example description! Tell everyone what your mod is about!",
@@ -12,7 +12,7 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/crystal-mod/icon.png",
+	"icon": "assets/crystalmod/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -26,9 +26,9 @@
 		]
 	},
 	"mixins": [
-		"crystal-mod.mixins.json",
+      "crystalmod.mixins.json",
 		{
-			"config": "crystal-mod.client.mixins.json",
+			"config": "crystalmod.client.mixins.json",
 			"environment": "client"
 		}
 	],
