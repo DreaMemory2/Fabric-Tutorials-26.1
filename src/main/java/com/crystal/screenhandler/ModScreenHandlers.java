@@ -1,7 +1,6 @@
 package com.crystal.screenhandler;
 
 import com.crystal.CrystalMod;
-import com.crystal.util.BlockPosPayload;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
