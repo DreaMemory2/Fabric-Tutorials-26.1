@@ -25,6 +25,7 @@
 			"com.crystal.CrystalModDataGenerator"
 		]
 	},
+	"accessWidener": "crystalmod.accesswidener",
 	"mixins": [
       "crystalmod.mixins.json",
 		{

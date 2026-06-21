@@ -1,5 +1,7 @@
 package com.crystal.screenhandler;
 
+import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.network.BlockPosPayload;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,14 +13,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class FluidTankScreenHandler extends AbstractContainerMenu {
     private final Container container;
+    public final FluidTankBlockEntity blockEntity;
 
-    public FluidTankScreenHandler(int syncId, Inventory inventory) {
-        this(syncId, inventory, new SimpleContainer(2));
+    /**
+     * <p>客户端，需要把同步数据（位置数据）传入{@code getBlockEntity}方法中</p>
+     */
+    public FluidTankScreenHandler(int syncId, Inventory inventory, BlockPosPayload payload) {
+        this(syncId, inventory, new SimpleContainer(2), (FluidTankBlockEntity) inventory.player.level().getBlockEntity(payload.pos()));
     }
 
-    public FluidTankScreenHandler(int syncId, Inventory playerInventory, Container container) {
+    // 服务端
+    public FluidTankScreenHandler(int syncId, Inventory playerInventory, Container container, FluidTankBlockEntity blockEntity) {
         super(ModScreenHandlers.FLUID_TANK, syncId);
         this.container = container;
+        this.blockEntity = blockEntity;
         checkContainerSize(container, 2);
         // 添加输入槽
         this.addSlot(new Slot(container, 0, 143, 19) {
@@ -39,11 +47,15 @@ public class FluidTankScreenHandler extends AbstractContainerMenu {
     @NotNull
     @Override
     public ItemStack quickMoveStack(@NotNull Player player, int slotIndex) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return this.container.stillValid(player);
+        return container.stillValid(player);
+    }
+
+    public FluidTankBlockEntity getBlockEntity() {
+        return blockEntity;
     }
 }

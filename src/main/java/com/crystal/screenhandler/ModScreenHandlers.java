@@ -1,6 +1,7 @@
 package com.crystal.screenhandler;
 
 import com.crystal.CrystalMod;
+import com.crystal.network.BlockPosPayload;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ModScreenHandlers {
 
-    public static final MenuType<@NotNull FluidTankScreenHandler> FLUID_TANK = register("fluid_tank", FluidTankScreenHandler::new);
+    public static final MenuType<@NotNull FluidTankScreenHandler> FLUID_TANK = register("fluid_tank", FluidTankScreenHandler::new, BlockPosPayload.PACKET_CODEC);
 
     public static <T extends AbstractContainerMenu, D extends CustomPacketPayload> ExtendedMenuType<@NotNull T, D> register(String name, ExtendedMenuType.ExtendedFactory<@NotNull T, D> factory, StreamCodec<? super RegistryFriendlyByteBuf, D> codec) {
         return Registry.register(BuiltInRegistries.MENU, CrystalMod.of(name), new ExtendedMenuType<>(factory, codec));

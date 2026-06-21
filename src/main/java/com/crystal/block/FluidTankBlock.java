@@ -58,7 +58,7 @@ public class FluidTankBlock extends Block implements EntityBlock {
     @NotNull
     @Override
     protected InteractionResult useWithoutItem(@NotNull  BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof  FluidTankBlockEntity blockEntity) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FluidTankBlockEntity blockEntity) {
             player.openMenu(blockEntity);
         }
         return InteractionResult.SUCCESS;

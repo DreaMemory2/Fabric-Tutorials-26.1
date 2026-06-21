@@ -2,7 +2,9 @@ package com.crystal.block.entity;
 
 import com.crystal.api.TickableBlockEntity;
 import com.crystal.block.ModBlockEntityTypes;
+import com.crystal.network.BlockPosPayload;
 import com.crystal.screenhandler.FluidTankScreenHandler;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -21,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,7 +37,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
-public class FluidTankBlockEntity extends BaseContainerBlockEntity implements TickableBlockEntity {
+public class FluidTankBlockEntity extends BaseContainerBlockEntity implements TickableBlockEntity, ExtendedMenuProvider<BlockPosPayload> {
+
     private final SimpleContainer inventory = new SimpleContainer(2) {
         /**
          * <p>映射表</p>
@@ -161,7 +165,7 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @NotNull
     @Override
     protected AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
-        return new FluidTankScreenHandler(containerId, inventory, this.inventory);
+        return new FluidTankScreenHandler(containerId, inventory, this.inventory, this);
     }
 
     @Override
@@ -206,5 +210,11 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @Override
     public int getContainerSize() {
         return 2;
+    }
+
+    @NotNull
+    @Override
+    public BlockPosPayload getScreenOpeningData(@NotNull ServerPlayer player) {
+        return new BlockPosPayload(player.getOnPos());
     }
 }
