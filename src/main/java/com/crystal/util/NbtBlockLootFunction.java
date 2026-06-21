@@ -5,6 +5,7 @@ import com.crystal.component.ModDataComponent;
 import com.crystal.component.SimpleFluidContent;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -16,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class NbtBlockLootFunction extends LootItemConditionalFunction {
-    public static final String NAME = "nbt_block_loot_function";
     public static final MapCodec<NbtBlockLootFunction> CODEC = RecordCodecBuilder.mapCodec(
             instance -> LootItemConditionalFunction.commonFields(instance).apply(instance, NbtBlockLootFunction::new));
 
@@ -36,8 +36,9 @@ public class NbtBlockLootFunction extends LootItemConditionalFunction {
         // 获取方块实体
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         // 存储液体数据
-        if (blockEntity instanceof FluidTankBlockEntity tankBlockEntity) {
-            stack.set(ModDataComponent.FLUID_SOLID, SimpleFluidContent.copyOf(tankBlockEntity.getFluidTank()));
+        if (blockEntity instanceof FluidTankBlockEntity tankBlockEntity && tankBlockEntity.getFluidTank().amount > 0) {
+            stack.set(ModDataComponent.STORED_FLUID, SimpleFluidContent.copyOf(tankBlockEntity.getFluidTank()));
+            stack.set(DataComponents.MAX_STACK_SIZE, 1);
         }
 
         return stack;

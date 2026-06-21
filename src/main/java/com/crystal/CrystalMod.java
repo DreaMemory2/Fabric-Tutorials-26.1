@@ -3,6 +3,7 @@ package com.crystal;
 import com.crystal.block.ModBlockEntityTypes;
 import com.crystal.block.ModBlocks;
 import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.component.ModDataComponent;
 import com.crystal.item.ModItemGroups;
 import com.crystal.item.ModItems;
 import com.crystal.loot.ModLootContents;
@@ -26,6 +27,7 @@ public class CrystalMod implements ModInitializer {
 		ModItemGroups.init();
 		ModScreenHandlers.init();
 		ModLootContents.init();
+		ModDataComponent.init();
 
 		ItemStorage.SIDED.registerForBlockEntity(FluidTankBlockEntity::getInventoryProvider, ModBlockEntityTypes.FLUID_TANK);
 		FluidStorage.SIDED.registerForBlockEntity(FluidTankBlockEntity::getFluidStorage, ModBlockEntityTypes.FLUID_TANK);
