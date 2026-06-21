@@ -1,9 +1,6 @@
 package com.crystal;
 
-import com.crystal.datagen.ModBlockTagDataGenerator;
-import com.crystal.datagen.ModDefaultLangDataGenerator;
-import com.crystal.datagen.ModChineseDataGenerator;
-import com.crystal.datagen.ModModelDataGenerator;
+import com.crystal.datagen.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -17,5 +14,7 @@ public class CrystalModDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ModChineseDataGenerator::new);
 		pack.addProvider(ModDefaultLangDataGenerator::new);
 		pack.addProvider(ModBlockTagDataGenerator::new);
+		pack.addProvider(ModRecipeDataGenerator::new);
+		pack.addProvider(ModBlockLootTableDataGenerator::new);
 	}
 }

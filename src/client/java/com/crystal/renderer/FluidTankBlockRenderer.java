@@ -76,9 +76,11 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
     }
 
     private void submitTankFluid(@NotNull SubmitNodeCollector collector, @NotNull PoseStack matrices, TextureAtlasSprite sprite, int color, float fill, int light, int overlay) {
+        // 储罐中总体积
+        float l = 12f / 16f;
         // 纹理图的位置
         float y1 = 2f / 16f;
-        float y2 = fill + y1;
+        float y2 = fill * l + y1;
         float[][] uv = getTextureUV(sprite, y1, y2);
         // 轻微偏移，防止图层叠加
         Vector3fc[][] vec = new FluidSquare(2.01f / 16f, y1, 2.01f / 16f, y2).getVec();
@@ -99,38 +101,39 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
         });
 
         // 绘制顶部（当液体未装满整个容器时）
-        if (fill >= 1) return;
-        float minU = sprite.getU(2f / 16f);
-        float maxU = sprite.getU(14f / 16f);
-        float minV = sprite.getV(2f / 16f);
-        float maxV = sprite.getV(14f / 16f);
+        if (fill <= 1) {
+            float minU = sprite.getU(2f / 16f);
+            float maxU = sprite.getU(14f / 16f);
+            float minV = sprite.getV(2f / 16f);
+            float maxV = sprite.getV(14f / 16f);
 
-        collector.submitCustomGeometry(matrices, RenderTypes.entityTranslucentEmissive(sprite.atlasLocation()), (pose, vertexConsumer) -> {
-            vertexConsumer.addVertex(pose, 2f / 16f, y2, 2f / 16f)
-                    .setColor(color)
-                    .setUv(minU, maxV)
-                    .setLight(light)
-                    .setOverlay(overlay)
-                    .setNormal(pose, 0, 1, 0);
-            vertexConsumer.addVertex(pose, 2f / 16f, y2, 14f / 16f)
-                    .setColor(color)
-                    .setUv(minU, minV)
-                    .setLight(light)
-                    .setOverlay(overlay)
-                    .setNormal(pose, 0, 1, 0);
-            vertexConsumer.addVertex(pose, 14f / 16f, y2, 14f / 16f)
-                    .setColor(color)
-                    .setUv(maxU, minV)
-                    .setLight(light)
-                    .setOverlay(overlay)
-                    .setNormal(pose, 0, 1, 0);
-            vertexConsumer.addVertex(pose, 14f / 16f, y2, 2f / 16f)
-                    .setColor(color)
-                    .setUv(maxU, maxV)
-                    .setLight(light)
-                    .setOverlay(overlay)
-                    .setNormal(pose, 0, 1, 0);
-        });
+            collector.submitCustomGeometry(matrices, RenderTypes.entityTranslucentEmissive(sprite.atlasLocation()), (pose, vertexConsumer) -> {
+                vertexConsumer.addVertex(pose, 2f / 16f, y2, 2f / 16f)
+                        .setColor(color)
+                        .setUv(minU, maxV)
+                        .setLight(light)
+                        .setOverlay(overlay)
+                        .setNormal(pose, 0, 1, 0);
+                vertexConsumer.addVertex(pose, 2f / 16f, y2, 14f / 16f)
+                        .setColor(color)
+                        .setUv(minU, minV)
+                        .setLight(light)
+                        .setOverlay(overlay)
+                        .setNormal(pose, 0, 1, 0);
+                vertexConsumer.addVertex(pose, 14f / 16f, y2, 14f / 16f)
+                        .setColor(color)
+                        .setUv(maxU, minV)
+                        .setLight(light)
+                        .setOverlay(overlay)
+                        .setNormal(pose, 0, 1, 0);
+                vertexConsumer.addVertex(pose, 14f / 16f, y2, 2f / 16f)
+                        .setColor(color)
+                        .setUv(maxU, maxV)
+                        .setLight(light)
+                        .setOverlay(overlay)
+                        .setNormal(pose, 0, 1, 0);
+            });
+        }
 
         matrices.popPose();
     }

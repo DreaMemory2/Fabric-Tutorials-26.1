@@ -5,6 +5,7 @@ import com.crystal.block.ModBlocks;
 import com.crystal.block.entity.FluidTankBlockEntity;
 import com.crystal.item.ModItemGroups;
 import com.crystal.item.ModItems;
+import com.crystal.loot.ModLootContents;
 import com.crystal.screenhandler.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -24,6 +25,7 @@ public class CrystalMod implements ModInitializer {
 		ModItems.init();
 		ModItemGroups.init();
 		ModScreenHandlers.init();
+		ModLootContents.init();
 
 		ItemStorage.SIDED.registerForBlockEntity(FluidTankBlockEntity::getInventoryProvider, ModBlockEntityTypes.FLUID_TANK);
 		FluidStorage.SIDED.registerForBlockEntity(FluidTankBlockEntity::getFluidStorage, ModBlockEntityTypes.FLUID_TANK);

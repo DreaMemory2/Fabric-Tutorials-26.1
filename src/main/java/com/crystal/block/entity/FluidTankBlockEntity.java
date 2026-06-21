@@ -2,6 +2,7 @@ package com.crystal.block.entity;
 
 import com.crystal.api.TickableBlockEntity;
 import com.crystal.block.ModBlockEntityTypes;
+import com.crystal.component.ModDataComponent;
 import com.crystal.network.BlockPosPayload;
 import com.crystal.screenhandler.FluidTankScreenHandler;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
@@ -18,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -35,7 +37,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.Nullable;
 
 public class FluidTankBlockEntity extends BaseContainerBlockEntity implements TickableBlockEntity, ExtendedMenuProvider<BlockPosPayload> {
 
@@ -169,8 +170,14 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     }
 
     @Override
-    public @Nullable Packet<@NotNull ClientGamePacketListener> getUpdatePacket() {
+    public Packet<@NotNull ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    protected void applyImplicitComponents(@NotNull DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        components.getOrDefault(ModDataComponent.FLUID_SOLID, fluidStorage);
     }
 
     @NotNull
@@ -215,6 +222,6 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @NotNull
     @Override
     public BlockPosPayload getScreenOpeningData(@NotNull ServerPlayer player) {
-        return new BlockPosPayload(player.getOnPos());
+        return new BlockPosPayload(this.getBlockPos());
     }
 }
