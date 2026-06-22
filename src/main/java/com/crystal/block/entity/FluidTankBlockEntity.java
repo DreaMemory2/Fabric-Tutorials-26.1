@@ -18,8 +18,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponentGetter;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -169,6 +167,8 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
         return new FluidTankScreenHandler(containerId, inventory, this.inventory, this);
     }
 
+    /* 数据同步 */
+
     @Override
     public Packet<@NotNull ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
@@ -213,6 +213,10 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
         return 2;
     }
 
+    /**
+     * @param player the player that is opening the screen
+     * @return 方块位置的数据同步，通过网络发包形式传输
+     */
     @NotNull
     @Override
     public BlockPosPayload getScreenOpeningData(@NotNull ServerPlayer player) {

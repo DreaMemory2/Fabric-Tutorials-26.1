@@ -16,6 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * <p>实现方块被挖掘后，方块物品存储液体功能</p>
+ * @see NbtBlockLootFunction#run(ItemStack itemstack, LootContext context)
+ */
 public class NbtBlockLootFunction extends LootItemConditionalFunction {
     public static final MapCodec<NbtBlockLootFunction> CODEC = RecordCodecBuilder.mapCodec(
             instance -> LootItemConditionalFunction.commonFields(instance).apply(instance, NbtBlockLootFunction::new));
@@ -35,7 +39,8 @@ public class NbtBlockLootFunction extends LootItemConditionalFunction {
     protected ItemStack run(@NotNull ItemStack stack, LootContext context) {
         // 获取方块实体
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        // 存储液体数据
+        // 存储液体数据，通过数据组件保存方块中液体的数据
+        // 判断方块实体存储液体是否为空
         if (blockEntity instanceof FluidTankBlockEntity tankBlockEntity && tankBlockEntity.getFluidTank().amount > 0) {
             stack.set(ModDataComponents.STORED_FLUID, SimpleFluidContent.copyOf(tankBlockEntity.getFluidTank()));
             stack.set(DataComponents.MAX_STACK_SIZE, 1);

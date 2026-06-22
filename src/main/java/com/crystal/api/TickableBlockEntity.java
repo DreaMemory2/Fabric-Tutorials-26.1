@@ -4,6 +4,27 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 
+/**
+ * <p>该接口的作用，使得原版tick形式参数减少（为零），使得tick方法变得简单</p>
+ * <p>使用方法：</p>
+ * <p>首先方块实体继承{@code TickableBlockEntity}接口，并实现tick抽象方法</p>
+ * <pre><code>
+ * public class ExampleBlockEntity extends TickableBlockEntity {
+ *  public void tick() {
+ *      // 代码块
+ *  }
+ * }
+ * </code></pre>
+ * <p>然后方块实现getTicker方法，在方法体中调用{@code TickableBlockEntity.getTicker}方法</p>
+ * <pre><code>
+ *     public class ExampleBlock extend Block {
+ *         public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState blockState, BlockEntityType<T> type) {
+ *             return TickableBlockEntity.getTicker(world);
+ *         }
+ *     }
+ * </code></pre>
+ * @see TickableBlockEntity#tick()
+ */
 public interface TickableBlockEntity {
     void tick();
 

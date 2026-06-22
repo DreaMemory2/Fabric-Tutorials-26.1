@@ -1,16 +1,15 @@
 package com.crystal.datagen;
 
 import com.crystal.block.ModBlocks;
-import com.crystal.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModDefaultLangDataGenerator extends FabricLanguageProvider {
+public class ModEnglishLangDataGenerator extends FabricLanguageProvider {
 
-    public ModDefaultLangDataGenerator(FabricPackOutput packOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    public ModEnglishLangDataGenerator(FabricPackOutput packOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(packOutput, registryLookup);
     }
 

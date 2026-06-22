@@ -7,6 +7,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
+/**
+ * <p>注册战利品表</p>
+ */
 public class ModLootContents {
 
     public static final MapCodec<NbtBlockLootFunction> NBT_BLOCK_LOOT_FUNCTION = register("nbt_block_loot_function", NbtBlockLootFunction.CODEC);

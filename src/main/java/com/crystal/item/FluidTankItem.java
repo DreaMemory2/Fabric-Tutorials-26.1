@@ -26,6 +26,7 @@ public class FluidTankItem extends BlockItem {
         SimpleFluidContent data = itemStack.getOrDefault(ModDataComponents.STORED_FLUID, SimpleFluidContent.EMPTY);
 
         if (data.isEmpty()) {
+            // 如果液体储罐没有液体，会显示为“空”
             builder.accept(Component.translatable("tooltip.crystalmod.fluid_empty"));
         } else {
             // 液体的容量占比

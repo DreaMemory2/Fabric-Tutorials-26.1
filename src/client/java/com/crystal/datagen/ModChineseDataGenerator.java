@@ -1,7 +1,6 @@
 package com.crystal.datagen;
 
 import com.crystal.block.ModBlocks;
-import com.crystal.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup.Provider;

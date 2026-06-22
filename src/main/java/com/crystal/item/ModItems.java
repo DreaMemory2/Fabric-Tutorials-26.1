@@ -1,16 +1,13 @@
 package com.crystal.item;
 
 import com.crystal.CrystalMod;
-import com.crystal.block.ModBlocks;
 import com.crystal.component.ModDataComponents;
 import com.crystal.component.SimpleFluidContent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 
 import java.util.function.Function;
 

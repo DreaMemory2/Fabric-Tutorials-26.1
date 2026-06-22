@@ -12,7 +12,7 @@ public class CrystalModDataGenerator implements DataGeneratorEntrypoint {
 
 		pack.addProvider(ModModelDataGenerator::new);
 		pack.addProvider(ModChineseDataGenerator::new);
-		pack.addProvider(ModDefaultLangDataGenerator::new);
+		pack.addProvider(ModEnglishLangDataGenerator::new);
 		pack.addProvider(ModBlockTagDataGenerator::new);
 		pack.addProvider(ModRecipeDataGenerator::new);
 		pack.addProvider(ModBlockLootTableDataGenerator::new);

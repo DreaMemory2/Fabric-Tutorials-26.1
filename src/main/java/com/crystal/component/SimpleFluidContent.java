@@ -21,6 +21,11 @@ public class SimpleFluidContent {
         this.fluidStorage = fluidStorage;
     }
 
+    /**
+     * <p>不能通过强制类型转换为{@code SimpleFluidStorage}类，这样导致液体存储对象为null</p>
+     * @param fluidStorage 单一液体存储
+     * @return 将输入液体存储复制到简单液体存储中，再通过Codec存储数据
+     */
     public static SimpleFluidContent copyOf(SingleFluidStorage fluidStorage) {
         long amount = fluidStorage.getAmount();
         long capacity = fluidStorage.getCapacity();
@@ -28,6 +33,10 @@ public class SimpleFluidContent {
         return new SimpleFluidContent(new SimpleFluidStorage(fluidState, amount, capacity));
     }
 
+    /**
+     * @return 判断液体是否为空
+     * @see SimpleFluidStorage#isEmpty()
+     */
     public boolean isEmpty() {
         return this.fluidStorage.isEmpty();
     }
@@ -36,6 +45,10 @@ public class SimpleFluidContent {
         return fluidStorage;
     }
 
+    /**
+     * @return 获取液体名称，例如：block.minecraft.water: "水"
+     * @see SimpleFluidStorage#getFluidName()
+     */
     public Component getFluidName() {
         return this.fluidStorage.getFluidName();
     }

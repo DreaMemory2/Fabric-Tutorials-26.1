@@ -14,15 +14,18 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import java.util.function.Function;
 
 public class ModBlocks {
-    // public static final Block FLUID_TANK = register("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
     public static final Block FLUID_TANK = registerWithoutBlockItem("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
 
-    public static Block registerWithoutBlockItem(String name, Function<Properties, Block> factory, Properties properties) {
+    /**
+     * <p>没有方块物品注册方法，例如：下界传送门方块，作物方块等</p>
+     * <p>请参见ModItem中的register方法</p>
+     */
+    private static Block registerWithoutBlockItem(String name, Function<Properties, Block> factory, Properties properties) {
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, CrystalMod.of(name));
         return Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(properties.setId(blockKey)));
     }
 
-    public static Block register(String name, Function<Properties, Block> factory, Properties properties) {
+    private static Block register(String name, Function<Properties, Block> factory, Properties properties) {
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, CrystalMod.of(name));
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, CrystalMod.of(name));
         // 通过属性构建方块
