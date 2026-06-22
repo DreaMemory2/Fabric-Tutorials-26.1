@@ -1,6 +1,7 @@
 package com.crystal.datagen;
 
 import com.crystal.block.ModBlocks;
+import com.crystal.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup.Provider;
@@ -18,6 +19,7 @@ public class ModChineseDataGenerator extends FabricLanguageProvider {
     public void generateTranslations(@NotNull Provider registryLookup, TranslationBuilder builder) {
         builder.add("container.crystalmod.fluid_tank", "液体储罐");
         builder.add("itemGroup.crystalmod.crystal", "水晶模组");
+        builder.add("tooltip.crystalmod.fluid_empty", "空");
         // 方块
         translateBlock(builder);
         // 物品

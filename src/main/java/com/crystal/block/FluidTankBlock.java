@@ -2,11 +2,17 @@ package com.crystal.block;
 
 import com.crystal.api.TickableBlockEntity;
 import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.component.ModDataComponents;
+import com.crystal.component.SimpleFluidContent;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -53,6 +59,27 @@ public class FluidTankBlock extends Block implements EntityBlock {
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new FluidTankBlockEntity(pos, state);
+    }
+
+    @Override
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity by, @NotNull ItemStack itemStack) {
+        super.setPlacedBy(level, pos, state, by, itemStack);
+
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        if (itemStack.has(ModDataComponents.STORED_FLUID)) {
+            SimpleFluidContent content = itemStack.get(ModDataComponents.STORED_FLUID);
+            if (content == null) return;
+            if (blockEntity instanceof FluidTankBlockEntity tankBlockEntity && !content.isEmpty()) {
+                SingleFluidStorage fluidStorage = tankBlockEntity.getFluidTank();
+                try(Transaction transaction = Transaction.openOuter()) {
+                    if (fluidStorage.isResourceBlank() && fluidStorage.getAmount() <= 0) {
+                        fluidStorage.insert(content.getFluidStorage().getResource(), content.getFluidStorage().getAmount(), transaction);
+                    }
+                    transaction.commit();
+                }
+            }
+        }
     }
 
     @NotNull

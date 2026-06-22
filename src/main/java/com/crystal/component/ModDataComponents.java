@@ -7,7 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.function.UnaryOperator;
 
-public class ModDataComponent {
+public class ModDataComponents {
     public static final DataComponentType<SimpleFluidContent> STORED_FLUID = register("stored_fluid", builder ->
             builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.PACKET_CODEC));
 

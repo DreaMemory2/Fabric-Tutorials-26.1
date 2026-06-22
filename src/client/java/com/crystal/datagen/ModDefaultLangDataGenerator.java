@@ -1,6 +1,7 @@
 package com.crystal.datagen;
 
 import com.crystal.block.ModBlocks;
+import com.crystal.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
@@ -17,6 +18,7 @@ public class ModDefaultLangDataGenerator extends FabricLanguageProvider {
     public void generateTranslations(HolderLookup.Provider provider, TranslationBuilder builder) {
         builder.add("container.crystalmod.fluid_tank", "Fluid Tank");
         builder.add("itemGroup.crystalmod.crystal", "Crystal Mod");
+        builder.add("tooltip.crystalmod.fluid_empty", "Empty");
         // Block
         translateBlock(builder);
         // Item

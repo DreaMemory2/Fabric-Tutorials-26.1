@@ -14,10 +14,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import java.util.function.Function;
 
 public class ModBlocks {
-    public static final Block FLUID_TANK = register("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    // public static final Block FLUID_TANK = register("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block FLUID_TANK = registerWithoutBlockItem("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
 
-    private static Block register(String name, Properties properties) {
-        return register(name, Block::new, properties);
+    public static Block registerWithoutBlockItem(String name, Function<Properties, Block> factory, Properties properties) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, CrystalMod.of(name));
+        return Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(properties.setId(blockKey)));
     }
 
     public static Block register(String name, Function<Properties, Block> factory, Properties properties) {

@@ -1,7 +1,7 @@
 package com.crystal.util;
 
 import com.crystal.block.entity.FluidTankBlockEntity;
-import com.crystal.component.ModDataComponent;
+import com.crystal.component.ModDataComponents;
 import com.crystal.component.SimpleFluidContent;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -37,7 +37,7 @@ public class NbtBlockLootFunction extends LootItemConditionalFunction {
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         // 存储液体数据
         if (blockEntity instanceof FluidTankBlockEntity tankBlockEntity && tankBlockEntity.getFluidTank().amount > 0) {
-            stack.set(ModDataComponent.STORED_FLUID, SimpleFluidContent.copyOf(tankBlockEntity.getFluidTank()));
+            stack.set(ModDataComponents.STORED_FLUID, SimpleFluidContent.copyOf(tankBlockEntity.getFluidTank()));
             stack.set(DataComponents.MAX_STACK_SIZE, 1);
         }
 

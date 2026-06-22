@@ -2,10 +2,8 @@ package com.crystal.block.entity;
 
 import com.crystal.api.TickableBlockEntity;
 import com.crystal.block.ModBlockEntityTypes;
-import com.crystal.component.ModDataComponent;
 import com.crystal.network.BlockPosPayload;
 import com.crystal.screenhandler.FluidTankScreenHandler;
-import com.crystal.util.SimpleFluidStorage;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -21,6 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -66,7 +65,7 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
      * <p>long capacity: 固有液体容量，为14桶</p>
      * <p>Runnable onChange: 当容器液体变化时，则通过markDirty()方法更新客户端并渲染液体</p>
      */
-    private final SimpleFluidStorage fluidStorage = (SimpleFluidStorage) SingleFluidStorage.withFixedCapacity(FluidConstants.BUCKET * 14, this::update);
+    private final SingleFluidStorage fluidStorage = SingleFluidStorage.withFixedCapacity(FluidConstants.BUCKET * 14, this::update);
     /**
      * <p>提供单一液体槽位，防止容器为空时，输入槽转换成其他物品</p>
      */
