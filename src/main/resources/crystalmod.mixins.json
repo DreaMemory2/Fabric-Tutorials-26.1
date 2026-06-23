@@ -1,13 +1,14 @@
 {
-	"required": true,
-	"package": "com.crystal.mixin",
-	"compatibilityLevel": "JAVA_25",
-	"mixins": [
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
+  "required": true,
+  "package": "com.crystal.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "InfinityTotemUndyingMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
 	}
 }
