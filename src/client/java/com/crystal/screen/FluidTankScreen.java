@@ -11,7 +11,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-
 public class FluidTankScreen extends AbstractContainerScreen<@NotNull FluidTankScreenHandler> {
     public static final Identifier TEXTURE = CrystalMod.of("textures/gui/fluid_tank.png");
     public final Inventory inventory;
@@ -28,7 +27,7 @@ public class FluidTankScreen extends AbstractContainerScreen<@NotNull FluidTankS
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
 
         FluidTankBlockEntity blockEntity = this.menu.getBlockEntity();
-        this.addRenderableWidget(FluidWidget.builder(blockEntity.getFluidTank()).position(this.leftPos + 49, this.topPos + 19).size(65, 47).posSupplier(blockEntity::getBlockPos).world(blockEntity.getLevel()).build());
+        this.addRenderableWidget(FluidWidget.builder(blockEntity.getFluidTank()).position(this.leftPos + 49, this.topPos + 19).size(65, 47).posSupplier(blockEntity::getBlockPos).build());
     }
 
     @Override

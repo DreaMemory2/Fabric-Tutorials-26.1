@@ -75,7 +75,7 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
         submitTankFluid(collector, matrices, sprite, state.color, state.fill, state.lightCoords, OverlayTexture.NO_OVERLAY);
     }
 
-    private void submitTankFluid(@NotNull SubmitNodeCollector collector, @NotNull PoseStack matrices, TextureAtlasSprite sprite, int color, float fill, int light, int overlay) {
+    public static void submitTankFluid(@NotNull SubmitNodeCollector collector, @NotNull PoseStack matrices, TextureAtlasSprite sprite, int color, float fill, int light, int overlay) {
         // 储罐中总体积
         float l = 12f / 16f;
         // 纹理图的位置
@@ -101,7 +101,7 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
         });
 
         // 绘制顶部（当液体未装满整个容器时）
-        if (fill <= 1) {
+        if (fill < 1) {
             float minU = sprite.getU(2f / 16f);
             float maxU = sprite.getU(14f / 16f);
             float minV = sprite.getV(2f / 16f);
@@ -151,7 +151,7 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
      * @param y2 最大高度
      * @return 液体方块侧面的四个顶点坐标
      */
-    private float[][] getTextureUV(TextureAtlasSprite sprite, float y1, float y2) {
+    private static float[][] getTextureUV(TextureAtlasSprite sprite, float y1, float y2) {
         // 纹理图的大小
         // u轴
         float minU = sprite.getU(2f / 16f);
