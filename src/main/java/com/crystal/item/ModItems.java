@@ -13,7 +13,6 @@ import java.util.function.Function;
 
 public class ModItems {
 
-    public static final Item RUBY = register("ruby", Item::new, new Item.Properties());
     public static final Item FLUID_TANK = register("fluid_tank", FluidTankItem::new, new Item.Properties().stacksTo(1)
             .component(ModDataComponents.STORED_FLUID, SimpleFluidContent.EMPTY)
     );

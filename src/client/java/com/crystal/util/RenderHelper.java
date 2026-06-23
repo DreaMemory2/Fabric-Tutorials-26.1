@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.level.material.Fluid;
 
-public class RenderHelpers {
+public final class RenderHelper {
 
     /**
      * Resolves the still texture sprite of the given fluid using the data-driven fluid models introduced in

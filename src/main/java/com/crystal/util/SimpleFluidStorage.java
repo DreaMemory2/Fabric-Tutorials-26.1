@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,6 +78,10 @@ public class SimpleFluidStorage extends SingleFluidStorage {
 
     public Component getFluidName() {
         return Component.translatable(this.getResource().getFluid().defaultFluidState().createLegacyBlock().getBlock().getDescriptionId());
+    }
+
+    public Fluid getFluid() {
+        return this.fluidState.getType();
     }
 
     /**
