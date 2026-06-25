@@ -15,7 +15,10 @@ public class ModBlockLootTableDataGenerator extends BlockLootTableProvider {
 
     @Override
     public void generate() {
-        this.add(ModBlocks.FLUID_TANK, this::createFluidTankBoxDrop);
-        createFluidTankBoxDrop(ModBlocks.FLUID_TANK);
+        this.add(ModBlocks.BASIC_FLUID_TANK, this::createFluidTankBoxDrop);
+        this.add(ModBlocks.ADVANCED_FLUID_TANK, this::createFluidTankBoxDrop);
+        this.add(ModBlocks.ELITE_FLUID_TANK, this::createFluidTankBoxDrop);
+        this.add(ModBlocks.ULTIMATE_FLUID_TANK, this::createFluidTankBoxDrop);
+        this.add(ModBlocks.CREATIVE_FLUID_TANK, this::createFluidTankBoxDrop);
     }
 }

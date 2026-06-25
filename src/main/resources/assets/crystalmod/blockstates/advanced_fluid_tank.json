@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "crystalmod:block/advanced_fluid_tank"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.crystal.block;
 
 import com.crystal.CrystalMod;
+import com.crystal.util.FluidTankTier;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -14,7 +15,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import java.util.function.Function;
 
 public class ModBlocks {
-    public static final Block FLUID_TANK = registerWithoutBlockItem("fluid_tank", FluidTankBlock::new, Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block FLUID_TANK = registerWithoutBlockItem("fluid_tank", properties -> new FluidTankBlock(FluidTankTier.BASIC, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block BASIC_FLUID_TANK = registerWithoutBlockItem("basic_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.BASIC, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block ADVANCED_FLUID_TANK = registerWithoutBlockItem("advanced_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.ADVANCED, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block ELITE_FLUID_TANK = registerWithoutBlockItem("elite_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.ELITE, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block ULTIMATE_FLUID_TANK = registerWithoutBlockItem("ultimate_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.ULTIMATE, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
+    public static final Block CREATIVE_FLUID_TANK = registerWithoutBlockItem("creative_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.CREATIVE, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
 
     /**
      * <p>没有方块物品注册方法，例如：下界传送门方块，作物方块等</p>

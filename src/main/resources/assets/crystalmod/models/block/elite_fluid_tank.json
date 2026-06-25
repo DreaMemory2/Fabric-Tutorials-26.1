@@ -1,0 +1,6 @@
+{
+  "parent": "crystalmod:block/fluid_tank",
+  "textures": {
+    "glass": "crystalmod:block/elite_fluid_tank_side"
+  }
+}

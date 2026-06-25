@@ -29,8 +29,20 @@ public class CrystalMod implements ModInitializer {
 		ModLootContents.init();
 		ModDataComponents.init();
 
-		ItemStorage.SIDED.registerForBlockEntity(FluidTankBlockEntity::getInventoryProvider, ModBlockEntityTypes.FLUID_TANK);
-		FluidStorage.SIDED.registerForBlockEntity(FluidTankBlockEntity::getFluidStorage, ModBlockEntityTypes.FLUID_TANK);
+		ItemStorage.SIDED.registerForBlockEntities((blockEntity, direction) -> ((FluidTankBlockEntity) blockEntity).getInventoryProvider(direction),
+				ModBlockEntityTypes.BASIC_FLUID_TANK,
+				ModBlockEntityTypes.ADVANCED_FLUID_TANK,
+				ModBlockEntityTypes.ELITE_FLUID_TANK,
+				ModBlockEntityTypes.ULTIMATE_FLUID_TANK,
+				ModBlockEntityTypes.CREATIVE_FLUID_TANK
+		);
+		FluidStorage.SIDED.registerForBlockEntities(((blockEntity, direction) -> ((FluidTankBlockEntity) blockEntity).getFluidStorage(direction)),
+				ModBlockEntityTypes.BASIC_FLUID_TANK,
+				ModBlockEntityTypes.ADVANCED_FLUID_TANK,
+				ModBlockEntityTypes.ELITE_FLUID_TANK,
+				ModBlockEntityTypes.ULTIMATE_FLUID_TANK,
+				ModBlockEntityTypes.CREATIVE_FLUID_TANK
+		);
 	}
 
 	public static Identifier of(String path) {

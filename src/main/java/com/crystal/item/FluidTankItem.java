@@ -1,6 +1,5 @@
 package com.crystal.item;
 
-import com.crystal.block.ModBlocks;
 import com.crystal.component.ModDataComponents;
 import com.crystal.component.SimpleFluidContent;
 import com.crystal.util.SimpleFluidStorage;
@@ -10,14 +9,15 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 public class FluidTankItem extends BlockItem {
 
-    public FluidTankItem(Properties properties) {
-        super(ModBlocks.FLUID_TANK, properties.useBlockDescriptionPrefix());
+    public FluidTankItem(Block block, Properties properties) {
+        super(block, properties.useBlockDescriptionPrefix());
     }
 
     @Override

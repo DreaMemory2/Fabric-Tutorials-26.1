@@ -18,6 +18,10 @@ public class ModBlockTagDataGenerator extends FabricTagsProvider.BlockTagsProvid
     @Override
     protected void addTags(@NotNull Provider registries) {
         valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(ModBlocks.FLUID_TANK);
+                .add(ModBlocks.BASIC_FLUID_TANK)
+                .add(ModBlocks.ADVANCED_FLUID_TANK)
+                .add(ModBlocks.ELITE_FLUID_TANK)
+                .add(ModBlocks.ULTIMATE_FLUID_TANK)
+                .add(ModBlocks.CREATIVE_FLUID_TANK);
     }
 }

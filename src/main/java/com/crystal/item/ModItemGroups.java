@@ -17,14 +17,18 @@ public class ModItemGroups {
             BuiltInRegistries.CREATIVE_MODE_TAB,
             ResourceKey.create(Registries.CREATIVE_MODE_TAB, CrystalMod.of("crystal")),
             FabricCreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModBlocks.FLUID_TANK))
+                    .icon(() -> new ItemStack(ModBlocks.BASIC_FLUID_TANK))
                     .title(Component.translatable("itemGroup.crystalmod.crystal"))
                     .displayItems(group())
                     .build());
 
     private static CreativeModeTab.DisplayItemsGenerator group() {
         return (context, entries) -> {
-            entries.accept(ModBlocks.FLUID_TANK);
+            entries.accept(ModBlocks.BASIC_FLUID_TANK);
+            entries.accept(ModBlocks.ADVANCED_FLUID_TANK);
+            entries.accept(ModBlocks.ELITE_FLUID_TANK);
+            entries.accept(ModBlocks.ULTIMATE_FLUID_TANK);
+            entries.accept(ModBlocks.CREATIVE_FLUID_TANK);
         };
     }
 

@@ -39,7 +39,7 @@ public class FluidTankScreenHandler extends AbstractContainerMenu {
             }
         });
         // 添加输出槽
-        this.addSlot(new Slot(container, 1, 143, 50));
+        this.addSlot(new FluidResultSlot(blockEntity, container, 1, 143, 50));
         // 物品栏
         this.addStandardInventorySlots(playerInventory, 8, 84);
     }

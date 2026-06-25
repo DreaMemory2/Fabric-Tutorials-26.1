@@ -47,6 +47,10 @@ public class SimpleFluidStorage extends SingleFluidStorage {
         this.capacity = capacity;
     }
 
+    public static SingleFluidStorage setFixedCapacity(long capacity) {
+        return SimpleFluidStorage.withFixedCapacity(capacity, () -> {});
+    }
+
     /**
      * @see StorageView#getCapacity()
      */

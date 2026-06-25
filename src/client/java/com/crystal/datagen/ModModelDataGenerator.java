@@ -1,7 +1,9 @@
 package com.crystal.datagen;
 
+import com.crystal.item.FluidTankItemTintSource;
 import com.crystal.item.ModItems;
 import com.crystal.renderer.FluidTankItemRenderer;
+import com.crystal.util.FluidTankTier;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -24,13 +26,17 @@ public class ModModelDataGenerator extends FabricModelProvider {
 
     @Override
     public void generateItemModels(@NotNull ItemModelGenerators model) {
-
-        createFluidTankModel(model, ModItems.FLUID_TANK);
+        createFluidTankModel(model, ModItems.BASIC_FLUID_TANK, FluidTankTier.BASIC.getColor());
+        createFluidTankModel(model, ModItems.ADVANCED_FLUID_TANK, FluidTankTier.ADVANCED.getColor());
+        createFluidTankModel(model, ModItems.ELITE_FLUID_TANK, FluidTankTier.ELITE.getColor());
+        createFluidTankModel(model, ModItems.ULTIMATE_FLUID_TANK, FluidTankTier.ULTIMATE.getColor());
+        createFluidTankModel(model, ModItems.CREATIVE_FLUID_TANK, FluidTankTier.CREATIVE.getColor());
     }
 
-    private static void createFluidTankModel(ItemModelGenerators model, Item item) {
+    private static void createFluidTankModel(ItemModelGenerators model, Item item, int color) {
         FluidTankItemRenderer.Unbaked unbaked = new FluidTankItemRenderer.Unbaked();
+        ItemModel.Unbaked tintedModel = ItemModelUtils.tintedModel(ModelLocationUtils.getModelLocation(item), new FluidTankItemTintSource(color));
         ItemModel.Unbaked fluidTankUnbaked = ItemModelUtils.specialModel(ModelLocationUtils.getModelLocation(item), unbaked);
-        model.itemModelOutput.accept(item, fluidTankUnbaked);
+        model.itemModelOutput.accept(item, ItemModelUtils.composite(tintedModel, fluidTankUnbaked));
     }
 }

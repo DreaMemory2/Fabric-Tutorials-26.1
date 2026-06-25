@@ -1,9 +1,10 @@
 package com.crystal.block;
 
 import com.crystal.api.TickableBlockEntity;
-import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.block.entity.*;
 import com.crystal.component.ModDataComponents;
 import com.crystal.component.SimpleFluidContent;
+import com.crystal.util.FluidTankTier;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
@@ -29,9 +30,11 @@ import org.jspecify.annotations.Nullable;
 
 public class FluidTankBlock extends Block implements EntityBlock {
     private static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 16, 14);
+    private final FluidTankTier tier;
 
-    public FluidTankBlock(Properties properties) {
+    public FluidTankBlock(FluidTankTier tier, Properties properties) {
         super(properties);
+        this.tier = tier;
     }
 
     @NotNull
@@ -58,7 +61,18 @@ public class FluidTankBlock extends Block implements EntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new FluidTankBlockEntity(pos, state);
+        String id = state.getBlock().getDescriptionId();
+        if (id.equals(ModBlocks.ADVANCED_FLUID_TANK.getDescriptionId())) {
+            return new AdvancedFluidTankBlockEntity(pos, state);
+        } else if (id.equals(ModBlocks.ELITE_FLUID_TANK.getDescriptionId())) {
+            return new EliteFluidTankBlockEntity(pos, state);
+        } else if (id.equals(ModBlocks.ULTIMATE_FLUID_TANK.getDescriptionId())) {
+            return new UltimateFluidTankBlockEntity(pos, state);
+        } else if (id.equals(ModBlocks.CREATIVE_FLUID_TANK.getDescriptionId())) {
+            return new CreativeFluidTankBlockEntity(pos, state);
+        } else {
+            return new BasicFluidTankBlockEntity(pos, state);
+        }
     }
 
     /**
@@ -103,5 +117,9 @@ public class FluidTankBlock extends Block implements EntityBlock {
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level world, @NotNull BlockState blockState, @NotNull BlockEntityType<T> type) {
         return TickableBlockEntity.getTicker(world);
+    }
+
+    public String getTier() {
+        return tier.name();
     }
 }

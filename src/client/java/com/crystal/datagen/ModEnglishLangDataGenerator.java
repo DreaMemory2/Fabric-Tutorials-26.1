@@ -26,7 +26,11 @@ public class ModEnglishLangDataGenerator extends FabricLanguageProvider {
     }
 
     private void translateBlock(TranslationBuilder builder) {
-        builder.add(ModBlocks.FLUID_TANK, "Fluid Tank");
+        builder.add(ModBlocks.BASIC_FLUID_TANK, "§aBasic Fluid Tank");
+        builder.add(ModBlocks.ADVANCED_FLUID_TANK, "§cAdvanced Fluid Tank");
+        builder.add(ModBlocks.ELITE_FLUID_TANK, "§bElite Fluid Tank");
+        builder.add(ModBlocks.ULTIMATE_FLUID_TANK, "§dUltimate Fluid Tank");
+        builder.add(ModBlocks.CREATIVE_FLUID_TANK, "Creative Fluid Tank");
     }
 
     private void translateItem(TranslationBuilder builder) {
