@@ -21,7 +21,7 @@ public class ModModelDataGenerator extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockModelGenerators model) {
+    public void generateBlockStateModels(@NotNull BlockModelGenerators model) {
     }
 
     @Override

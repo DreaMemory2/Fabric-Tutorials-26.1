@@ -20,10 +20,6 @@ public record FluidTankItemTintSource(Integer color) implements ItemTintSource {
             ).apply(instance, FluidTankItemTintSource::new)
     );
 
-    public FluidTankItemTintSource() {
-        this(0x5FFFB8);
-    }
-
     @Override
     public int calculate(@NonNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
         FluidTankTierComponent component = itemStack.get(ModDataComponents.FLUID_TANK_TIER);

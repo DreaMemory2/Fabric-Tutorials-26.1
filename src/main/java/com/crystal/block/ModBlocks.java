@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import java.util.function.Function;
 
 public class ModBlocks {
-    public static final Block FLUID_TANK = registerWithoutBlockItem("fluid_tank", properties -> new FluidTankBlock(FluidTankTier.BASIC, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
     public static final Block BASIC_FLUID_TANK = registerWithoutBlockItem("basic_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.BASIC, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
     public static final Block ADVANCED_FLUID_TANK = registerWithoutBlockItem("advanced_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.ADVANCED, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
     public static final Block ELITE_FLUID_TANK = registerWithoutBlockItem("elite_fluid_tank", properties -> new FluidTankBlock(FluidTankTier.ELITE, properties), Properties.ofFullCopy(Blocks.IRON_BLOCK));
