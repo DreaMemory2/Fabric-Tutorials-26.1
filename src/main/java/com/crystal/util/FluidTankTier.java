@@ -23,7 +23,15 @@ public enum FluidTankTier {
         return color;
     }
 
+    public int getColor(String name) {
+        return FluidTankTier.valueOf(name.toUpperCase()).getColor();
+    }
+
     public long getCapacity() {
         return capacity;
+    }
+
+    public String getName() {
+        return name;
     }
 }

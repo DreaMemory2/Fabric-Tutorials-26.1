@@ -1,7 +1,7 @@
 package com.crystal.item;
 
-import com.crystal.component.ModDataComponents;
-import com.crystal.component.SimpleFluidContent;
+import com.crystal.register.ModDataComponents;
+import com.crystal.util.SimpleFluidContent;
 import com.crystal.util.SimpleFluidStorage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

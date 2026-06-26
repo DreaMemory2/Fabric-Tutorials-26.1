@@ -4,6 +4,7 @@ import com.crystal.block.FluidTankBlockTintSource;
 import com.crystal.block.ModBlockEntityTypes;
 import com.crystal.block.ModBlocks;
 import com.crystal.item.FluidTankItemTintSource;
+import com.crystal.item.juice.JuiceItemTintSource;
 import com.crystal.renderer.FluidTankBlockRenderer;
 import com.crystal.renderer.FluidTankItemRenderer;
 import com.crystal.screen.FluidTankScreen;
@@ -34,6 +35,7 @@ public class CrystalModClient implements ClientModInitializer {
 
 		SpecialModelRenderers.ID_MAPPER.put(FluidTankItemRenderer.ID, FluidTankItemRenderer.Unbaked.MAP_CODEC);
 		ItemTintSources.ID_MAPPER.put(CrystalMod.of("fluid_tank"), FluidTankItemTintSource.CODEC);
+		ItemTintSources.ID_MAPPER.put(CrystalMod.of("juice"), JuiceItemTintSource.MAP_CODEC);
 
 		BlockColorRegistry.register(List.of(new FluidTankBlockTintSource()),
 				ModBlocks.BASIC_FLUID_TANK,

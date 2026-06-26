@@ -1,8 +1,7 @@
 package com.crystal.util;
 
 import com.crystal.block.entity.FluidTankBlockEntity;
-import com.crystal.component.ModDataComponents;
-import com.crystal.component.SimpleFluidContent;
+import com.crystal.register.ModDataComponents;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.component.DataComponents;

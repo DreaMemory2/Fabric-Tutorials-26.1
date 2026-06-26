@@ -2,6 +2,8 @@ package com.crystal.item;
 
 import com.crystal.CrystalMod;
 import com.crystal.block.ModBlocks;
+import com.crystal.item.juice.JuiceContents;
+import com.crystal.register.ModRegistryKeys;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,6 +31,12 @@ public class ModItemGroups {
             entries.accept(ModBlocks.ELITE_FLUID_TANK);
             entries.accept(ModBlocks.ULTIMATE_FLUID_TANK);
             entries.accept(ModBlocks.CREATIVE_FLUID_TANK);
+
+            context.holders().lookup(ModRegistryKeys.JUICE).ifPresent(juices ->
+                    juices.listElements().filter(juice -> juice.value().isEnabled(context.enabledFeatures()))
+                            .map(juice -> JuiceContents.createItemStack(ModItems.JUICE, juice))
+                            .forEach(stack -> entries.accept(stack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS))
+            );
         };
     }
 

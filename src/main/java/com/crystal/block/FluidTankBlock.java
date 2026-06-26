@@ -2,8 +2,8 @@ package com.crystal.block;
 
 import com.crystal.api.TickableBlockEntity;
 import com.crystal.block.entity.*;
-import com.crystal.component.ModDataComponents;
-import com.crystal.component.SimpleFluidContent;
+import com.crystal.register.ModDataComponents;
+import com.crystal.util.SimpleFluidContent;
 import com.crystal.util.FluidTankTier;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -120,6 +120,6 @@ public class FluidTankBlock extends Block implements EntityBlock {
     }
 
     public String getTier() {
-        return tier.name();
+        return tier.getName();
     }
 }

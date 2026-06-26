@@ -226,7 +226,7 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @NotNull
     @Override
     protected Component getDefaultName() {
-        return Component.translatable("container.crystalmod.fluid_tank");
+        return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
     }
 
     @NotNull

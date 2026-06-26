@@ -1,4 +1,4 @@
-package com.crystal.loot;
+package com.crystal.register;
 
 import com.crystal.CrystalMod;
 import com.crystal.util.NbtBlockLootFunction;

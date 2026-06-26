@@ -1,9 +1,9 @@
 package com.crystal.renderer;
 
 import com.crystal.CrystalMod;
-import com.crystal.component.ModDataComponents;
-import com.crystal.component.SimpleFluidContent;
+import com.crystal.register.ModDataComponents;
 import com.crystal.util.RenderHelper;
+import com.crystal.util.SimpleFluidContent;
 import com.crystal.util.SimpleFluidStorage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;

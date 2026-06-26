@@ -1,6 +1,5 @@
-package com.crystal.component;
+package com.crystal.util;
 
-import com.crystal.util.SimpleFluidStorage;
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.minecraft.network.RegistryFriendlyByteBuf;
