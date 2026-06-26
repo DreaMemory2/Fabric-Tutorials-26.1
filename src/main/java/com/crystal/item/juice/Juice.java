@@ -41,4 +41,12 @@ public class Juice implements FeatureElement {
     public int getColor() {
         return color;
     }
+
+    public List<MobEffectInstance> getEffects() {
+        return effects;
+    }
+
+    public MobEffectInstance getEffect() {
+        return effects.getFirst();
+    }
 }
