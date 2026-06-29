@@ -30,7 +30,7 @@ public class MechanicalPipeBlockTest {
 
     @Test
     public void info() {
-        Map<Direction, BooleanProperty> m1 = PipeBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter((e) -> ((Direction)e.getKey()).getAxis().isHorizontal()).collect(Util.toMap());
+        Map<Direction, BooleanProperty> m1 = PipeBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter((e) -> e.getKey().getAxis().isHorizontal()).collect(Util.toMap());
         Map<Direction, BooleanProperty> m2 = PipeBlock.PROPERTY_BY_DIRECTION;
 
         CrystalMod.LOGGER.info(m1.toString());
