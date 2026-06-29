@@ -31,6 +31,8 @@ public class ModItemGroups {
             entries.accept(ModBlocks.ELITE_FLUID_TANK);
             entries.accept(ModBlocks.ULTIMATE_FLUID_TANK);
             entries.accept(ModBlocks.CREATIVE_FLUID_TANK);
+            entries.accept(ModBlocks.BASIC_MECHANICAL_PIPE);
+            entries.accept(ModBlocks.ADVANCED_MECHANICAL_PIPE);
 
             context.holders().lookup(ModRegistryKeys.JUICE).ifPresent(juices ->
                     juices.listElements().filter(juice -> juice.value().isEnabled(context.enabledFeatures()))

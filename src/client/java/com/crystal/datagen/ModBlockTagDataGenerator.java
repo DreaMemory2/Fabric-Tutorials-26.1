@@ -1,6 +1,7 @@
 package com.crystal.datagen;
 
 import com.crystal.block.ModBlocks;
+import com.crystal.register.ModBlockTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup.Provider;
@@ -23,5 +24,9 @@ public class ModBlockTagDataGenerator extends FabricTagsProvider.BlockTagsProvid
                 .add(ModBlocks.ELITE_FLUID_TANK)
                 .add(ModBlocks.ULTIMATE_FLUID_TANK)
                 .add(ModBlocks.CREATIVE_FLUID_TANK);
+
+        valueLookupBuilder(ModBlockTags.CONNECTION_MECHANICAL_PIPE)
+                .add(ModBlocks.BASIC_MECHANICAL_PIPE)
+                .add(ModBlocks.ADVANCED_MECHANICAL_PIPE);
     }
 }

@@ -76,6 +76,8 @@ public class ModChineseDataGenerator extends FabricLanguageProvider {
         builder.add(ModBlocks.ELITE_FLUID_TANK, "§b精英 液体储罐");
         builder.add(ModBlocks.ULTIMATE_FLUID_TANK, "§d终极 液体储罐");
         builder.add(ModBlocks.CREATIVE_FLUID_TANK, "创造 液体储罐");
+        builder.add(ModBlocks.BASIC_MECHANICAL_PIPE, "§a基础 机械管道");
+        builder.add(ModBlocks.ADVANCED_MECHANICAL_PIPE, "§c高级 机械管道");
     }
 
     private void translateItem(TranslationBuilder builder) {

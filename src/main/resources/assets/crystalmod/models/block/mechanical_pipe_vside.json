@@ -1,0 +1,20 @@
+{
+	"texture_size": [8, 8],
+	"texture": {
+		"pipe": "#pipe",
+		"particle": "#pipe"
+	},
+	"elements": [
+		{
+			"from": [4, 12, 4],
+			"to": [12, 16, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 16, 8], "texture": "#pipe"},
+				"west": {"uv": [0, 0, 16, 8], "texture": "#pipe"},
+				"north": {"uv": [0, 0, 16, 8], "texture": "#pipe"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#pipe"}
+			}
+		}
+	]
+}
