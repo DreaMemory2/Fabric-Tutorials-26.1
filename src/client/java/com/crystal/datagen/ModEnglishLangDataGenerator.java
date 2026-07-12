@@ -20,7 +20,11 @@ public class ModEnglishLangDataGenerator extends FabricLanguageProvider {
     @Override
     public void generateTranslations(HolderLookup.@NonNull Provider provider, TranslationBuilder builder) {
         builder.add("itemGroup.crystalmod.crystal", "Crystal Mod");
-        builder.add("tooltip.crystalmod.fluid_empty", "Empty");
+        builder.add("tooltip.crystalmod.detail.left_shift", "Press §9Left Shift§f to view details");
+        builder.add("tooltip.crystalmod.description.left_shift", "Press §bShift + N§f to view description");
+        builder.add("tooltip.crystalmod.fluid_tank.empty", "Empty");
+        builder.add("tooltip.crystalmod.fluid_tank.fluid_tank_capacity", "Capacity");
+        builder.add("tooltip.crystalmod.fluid_tank.capacity_infinity", "Infinity");
         // Block
         translateBlock(builder);
         // Item
@@ -71,10 +75,10 @@ public class ModEnglishLangDataGenerator extends FabricLanguageProvider {
     }
 
     private void translateBlock(TranslationBuilder builder) {
-        builder.add(ModBlocks.BASIC_FLUID_TANK, "§aBasic Fluid Tank");
-        builder.add(ModBlocks.ADVANCED_FLUID_TANK, "§cAdvanced Fluid Tank");
-        builder.add(ModBlocks.ELITE_FLUID_TANK, "§bElite Fluid Tank");
-        builder.add(ModBlocks.ULTIMATE_FLUID_TANK, "§dUltimate Fluid Tank");
+        builder.add(ModBlocks.BASIC_FLUID_TANK, "Basic Fluid Tank");
+        builder.add(ModBlocks.ADVANCED_FLUID_TANK, "Advanced Fluid Tank");
+        builder.add(ModBlocks.ELITE_FLUID_TANK, "Elite Fluid Tank");
+        builder.add(ModBlocks.ULTIMATE_FLUID_TANK, "Ultimate Fluid Tank");
         builder.add(ModBlocks.CREATIVE_FLUID_TANK, "Creative Fluid Tank");
     }
 

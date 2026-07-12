@@ -1,4 +1,4 @@
-package com.crystal.block.entity;
+package com.crystal.block.entity.tank;
 
 import com.crystal.block.ModBlockEntityTypes;
 import com.crystal.util.FluidTankTier;

@@ -1,6 +1,6 @@
 package com.crystal.util;
 
-import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.block.entity.tank.FluidTankBlockEntity;
 import com.crystal.register.ModDataComponents;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

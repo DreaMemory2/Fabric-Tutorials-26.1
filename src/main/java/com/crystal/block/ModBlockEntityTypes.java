@@ -1,7 +1,7 @@
 package com.crystal.block;
 
 import com.crystal.CrystalMod;
-import com.crystal.block.entity.*;
+import com.crystal.block.entity.tank.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

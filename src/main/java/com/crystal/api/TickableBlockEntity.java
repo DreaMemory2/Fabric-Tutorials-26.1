@@ -37,7 +37,7 @@ public interface TickableBlockEntity {
      * @param <T> 使静态方法更够通用到任何方块实体上
      */
     static <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world) {
-        return world.isClientSide() ? null : (pworld, pos, state, blockEntity) -> {
+        return world.isClientSide() ? null : (level, pos, state, blockEntity) -> {
             // 检查是否为具有Tick的方块实体
             if (blockEntity instanceof TickableBlockEntity tickableBlockEntity){
                 tickableBlockEntity.tick();

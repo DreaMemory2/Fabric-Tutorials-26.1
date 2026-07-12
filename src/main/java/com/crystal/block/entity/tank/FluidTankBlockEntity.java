@@ -1,4 +1,4 @@
-package com.crystal.block.entity;
+package com.crystal.block.entity.tank;
 
 import com.crystal.api.TickableBlockEntity;
 import com.crystal.network.BlockPosPayload;
@@ -24,12 +24,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,37 +37,14 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 public class FluidTankBlockEntity extends BaseContainerBlockEntity implements TickableBlockEntity, ExtendedMenuProvider<BlockPosPayload> {
-    private final SimpleContainer inventory = new SimpleContainer(2) {
-        /**
-         * <p>映射表</p>
-         * <p>Yarn: void markDirty()</p>
-         */
-        @Override
-        public void setChanged() {
-            super.setChanged();
-            update();
-        }
-
-        /**
-         * 调用{@link FluidTankBlockEntity#isValid(ItemStack itemStack, int slot)}方法
-         */
-        @Override
-        public boolean canPlaceItem(int slot, @NotNull ItemStack itemStack) {
-            return FluidTankBlockEntity.this.isValid(itemStack, slot);
-        }
-    };
-
-    private final ContainerStorage inventoryStorage = ContainerStorage.of(inventory, null);
+    private NonNullList<ItemStack> items = NonNullList.withSize(2, ItemStack.EMPTY);
+    private final ContainerStorage inventoryStorage = ContainerStorage.of(this, null);
     /**
      * <p>单一流体存储</p>
      * <p>long capacity: 固有液体容量，为14桶</p>
      * <p>Runnable onChange: 当容器液体变化时，则通过markDirty()方法更新客户端并渲染液体</p>
      */
     private final SingleFluidStorage fluidStorage;
-    /**
-     * <p>提供单一液体槽位，防止容器为空时，输入槽转换成其他物品</p>
-     */
-    private final ContainerItemContext fluidItemContext = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(0));
 
     public FluidTankBlockEntity(BlockEntityType<? extends BlockEntity> type, SingleFluidStorage fluidStorage, BlockPos worldPosition, BlockState blockState) {
         super(type, worldPosition, blockState);
@@ -81,89 +55,52 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     public void tick() {
         // 只在服务端时触发
         if (level == null || level.isClientSide()) return;
-        // 首先：检查容器内输入槽是否为空，槽位中的物品是否有效
-        if(inventory.isEmpty() || !isValid(inventory.getItem(0), 0)) return;
-        // 然后，获取液体存储，注意：液体存储的容量为动态（可能为空可能已存液体），所以提供单一输出槽，不能转换物品
-        // 如果通过物品提取液体，导致输入物品转换其他物品，例如：输入岩浆桶且容器存取水，则转变为水桶再存储液体
-        Storage<FluidVariant> fluidStorage = this.fluidItemContext.find(FluidStorage.ITEM);
 
-        insert(fluidStorage);
-        Storage<FluidVariant> itemFluidStorge = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(1)).find(FluidStorage.ITEM);
-        extract(itemFluidStorge);
+        Storage<FluidVariant> input = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(0)).find(FluidStorage.ITEM);
+        Storage<FluidVariant> output = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(1)).find(FluidStorage.ITEM);
 
+        if (input != null) {
+            // 输入液体
+            inputFluid(input);
+        } else if (output != null) {
+            // 输出液体
+            outputFluid(output);
+        }
     }
 
-    private void extract(Storage<FluidVariant> fluidStorage) {
-        // 确保液体存储不为空
-        if (fluidStorage == null) return;
-        ItemStack itemStack = inventory.items.get(1);
-        if (itemStack.getItem() == Items.BUCKET && itemStack.getCount() == 1) {
-            // 如果成功查找物品（桶），则提取桶中的液体
-            SingleFluidStorage fluidTank = this.fluidStorage;
-
-            if (fluidTank.isResourceBlank() && fluidTank.getAmount() < FluidConstants.BUCKET) return;
-            Item bucket = null;
+    private void inputFluid(Storage<FluidVariant> itemFluidStorage) {
+        for (StorageView<FluidVariant> view : itemFluidStorage.nonEmptyViews()) {
+            if (view.isResourceBlank()) continue;
             try(Transaction transaction = Transaction.openOuter()) {
-                FluidVariant variant = fluidTank.variant;
-                long extracted = fluidTank.extract(variant, FluidConstants.BUCKET, transaction);
-                long inserted = fluidStorage.insert(variant, extracted, transaction);
-                if (inserted < FluidConstants.BUCKET) {
-                    long extra = FluidConstants.BUCKET - inserted;
-                    // 移除多余的液体
-                    fluidTank.insert(variant, extra, transaction);
-                    bucket = fluidTank.variant.getFluid().getBucket();
-                }
+                FluidVariant variant = view.getResource();
+                long extract = itemFluidStorage.extract(variant, FluidConstants.BUCKET, transaction);
+                this.fluidStorage.insert(variant, extract, transaction);
 
-                // 提取液体
-                fluidTank.extract(variant, FluidConstants.BUCKET, transaction);
                 transaction.commit();
             }
-
-            if (bucket == null) return;
-            itemStack.shrink(1);
-            inventory.items.set(1, new ItemStack(bucket));
         }
     }
 
-    private void insert(Storage<FluidVariant> itemFluidStorage) {
-        // 确保液体存储不为空
-        if (itemFluidStorage == null) return;
-        // 遍历查找所以物品，找到这个物品可以提取液体（事务模拟）
-        FluidVariant match = null;
-        for (StorageView<FluidVariant> storageView : itemFluidStorage.nonEmptyViews()) {
-            // 如果存储节点为空，跳出循环
-            if (storageView.isResourceBlank()) continue;
+    private void outputFluid(Storage<FluidVariant> itemFluidStorage) {
+        for (StorageView<FluidVariant> view : fluidStorage.nonEmptyViews()) {
+            if (view.isResourceBlank()) continue;
             try(Transaction transaction = Transaction.openOuter()) {
-                // 假如输入是桶物品时，则获取桶式存储节点
-                if (this.fluidStorage.insert(storageView.getResource(), FluidConstants.BUCKET, transaction) > 0) {
-                    match = storageView.getResource();
-                    break;
-                }
+                FluidVariant resource = view.getResource();
+                long extract = this.fluidStorage.extract(resource, FluidConstants.BUCKET, transaction);
+                itemFluidStorage.insert(resource, extract, transaction);
+
+                transaction.commit();
             }
-        }
-
-        if (match == null || match.isBlank()) return;
-
-        // 如果成功查找物品（桶），则提取桶中的液体
-        try(Transaction transaction = Transaction.openOuter()) {
-            long inserted = this.fluidStorage.insert(match, FluidConstants.BUCKET, transaction);
-            long extracted = itemFluidStorage.extract(match, inserted, transaction);
-            if (extracted < FluidConstants.BUCKET) {
-                long extra = FluidConstants.BUCKET - extracted;
-                // 移除多余的液体
-                this.fluidStorage.extract(match, extra, transaction);
-            }
-
-            transaction.commit();
         }
     }
 
     /**
-     * @param stack 物品
      * @param slot 槽位下标（设置输入槽的下标为0）
+     * @param stack 物品
      * @return 检查槽位中物品是否合法物品（例如：岩浆桶，水桶等）
      */
-    public boolean isValid(ItemStack stack, int slot) {
+    @Override
+    public boolean canPlaceItem(int slot, @NotNull ItemStack stack) {
         // 完全支持液体提取的检查
         // 例如：检查输入槽是否为空桶或输入槽为空槽
         if (stack.isEmpty()) return true;
@@ -175,8 +112,9 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
         return storage != null;
     }
 
-    private void update() {
-        setChanged();
+    @Override
+    public void setChanged() {
+        super.setChanged();
         if(level != null) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
@@ -186,7 +124,7 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
         super.loadAdditional(input);
-        ContainerHelper.loadAllItems(input, this.inventory.items);
+        ContainerHelper.loadAllItems(input, items);
         // 加载液体存储数据
         this.fluidStorage.readValue(input);
     }
@@ -194,20 +132,20 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
         super.saveAdditional(output);
-        ContainerHelper.saveAllItems(output, this.inventory.items);
+        ContainerHelper.saveAllItems(output, items);
         // 保存液体存储数据
         this.fluidStorage.writeValue(output);
     }
 
     @Override
     protected void setItems(@NotNull NonNullList<ItemStack> items) {
-        inventory.items.set(1, items.get(1));
+       this.items = items;
     }
 
     @NotNull
     @Override
     protected AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
-        return new FluidTankScreenHandler(containerId, inventory, this.inventory, this);
+        return new FluidTankScreenHandler(containerId, inventory, this, this);
     }
 
     /* 数据同步 */
@@ -232,7 +170,7 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     @NotNull
     @Override
     protected NonNullList<ItemStack> getItems() {
-        return this.inventory.getItems();
+        return this.items;
     }
 
     public ContainerStorage getInventoryProvider(Direction direction) {
@@ -245,10 +183,6 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
 
     public SingleFluidStorage getFluidTank() {
         return this.fluidStorage;
-    }
-
-    public SimpleContainer getInventory() {
-        return this.inventory;
     }
 
     @Override

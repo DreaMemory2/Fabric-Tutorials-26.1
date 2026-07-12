@@ -2,16 +2,21 @@ package com.crystal;
 
 import com.crystal.block.ModBlockEntityTypes;
 import com.crystal.block.ModBlocks;
-import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.block.entity.tank.FluidTankBlockEntity;
 import com.crystal.item.ModItemGroups;
 import com.crystal.item.ModItems;
 import com.crystal.register.ModDataComponents;
 import com.crystal.register.ModLootContents;
 import com.crystal.screenhandler.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.impl.transfer.fluid.EmptyBucketStorage;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +48,11 @@ public class CrystalMod implements ModInitializer {
 				ModBlockEntityTypes.ULTIMATE_FLUID_TANK,
 				ModBlockEntityTypes.CREATIVE_FLUID_TANK
 		);
+
+		/*FluidStorage.combinedItemApiProvider(Items.BUCKET).register(context -> new EmptyItemFluidStorage(
+				context, Items.WATER_BUCKET, Fluids.WATER, FluidConstants.BUCKET
+		));*/
+		FluidStorage.combinedItemApiProvider(Items.BUCKET).register(EmptyBucketStorage::new);
 	}
 
 	public static Identifier of(String path) {

@@ -1,7 +1,7 @@
 package com.crystal.block;
 
 import com.crystal.api.TickableBlockEntity;
-import com.crystal.block.entity.*;
+import com.crystal.block.entity.tank.*;
 import com.crystal.register.ModDataComponents;
 import com.crystal.util.SimpleFluidContent;
 import com.crystal.util.FluidTankTier;
@@ -52,7 +52,7 @@ public class FluidTankBlock extends Block implements EntityBlock {
     protected void affectNeighborsAfterRemoval(BlockState state, @NotNull ServerLevel world, @NotNull BlockPos pos, boolean moved) {
         if (state.getBlock() != this) {
             if(world.getBlockEntity(pos) instanceof FluidTankBlockEntity blockEntity) {
-                Containers.dropContents(world, pos, blockEntity.getInventory().items);
+                Containers.dropContents(world, pos, blockEntity);
                 // 比较器更新: https://hotpad100c.github.io/posts/ComparatorUpdate/
                 world.updateNeighbourForOutputSignal(pos, this);
             }
@@ -61,18 +61,14 @@ public class FluidTankBlock extends Block implements EntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        String id = state.getBlock().getDescriptionId();
-        if (id.equals(ModBlocks.ADVANCED_FLUID_TANK.getDescriptionId())) {
-            return new AdvancedFluidTankBlockEntity(pos, state);
-        } else if (id.equals(ModBlocks.ELITE_FLUID_TANK.getDescriptionId())) {
-            return new EliteFluidTankBlockEntity(pos, state);
-        } else if (id.equals(ModBlocks.ULTIMATE_FLUID_TANK.getDescriptionId())) {
-            return new UltimateFluidTankBlockEntity(pos, state);
-        } else if (id.equals(ModBlocks.CREATIVE_FLUID_TANK.getDescriptionId())) {
-            return new CreativeFluidTankBlockEntity(pos, state);
-        } else {
-            return new BasicFluidTankBlockEntity(pos, state);
-        }
+        String id = state.getBlock().getDescriptionId().split("\\.")[2];
+        return switch (id) {
+            case "advanced_fluid_tank" -> new AdvancedFluidTankBlockEntity(pos, state);
+            case "elite_fluid_tank" -> new EliteFluidTankBlockEntity(pos, state);
+            case "ultimate_fluid_tank" -> new UltimateFluidTankBlockEntity(pos, state);
+            case "creative_fluid_tank" -> new CreativeFluidTankBlockEntity(pos, state);
+            default ->  new BasicFluidTankBlockEntity(pos, state);
+        };
     }
 
     /**

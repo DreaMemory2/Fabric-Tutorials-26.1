@@ -20,7 +20,11 @@ public class ModChineseDataGenerator extends FabricLanguageProvider {
     @Override
     public void generateTranslations(@NotNull Provider registryLookup, TranslationBuilder builder) {
         builder.add("itemGroup.crystalmod.crystal", "水晶模组");
-        builder.add("tooltip.crystalmod.fluid_empty", "空");
+        builder.add("tooltip.crystalmod.detail.left_shift", "按住 §9左Shift§f 可查看详情");
+        builder.add("tooltip.crystalmod.description.left_shift", "按住 §bShift + N§f 可查看描述");
+        builder.add("tooltip.crystalmod.fluid_tank.empty", "空");
+        builder.add("tooltip.crystalmod.fluid_tank.fluid_tank_capacity", "容量");
+        builder.add("tooltip.crystalmod.fluid_tank.capacity_infinity", "无限");
         // 方块
         translateBlock(builder);
         // 物品
@@ -71,10 +75,10 @@ public class ModChineseDataGenerator extends FabricLanguageProvider {
     }
 
     private void translateBlock(TranslationBuilder builder) {
-        builder.add(ModBlocks.BASIC_FLUID_TANK, "§a基础 液体储罐");
-        builder.add(ModBlocks.ADVANCED_FLUID_TANK, "§c高级 液体储罐");
-        builder.add(ModBlocks.ELITE_FLUID_TANK, "§b精英 液体储罐");
-        builder.add(ModBlocks.ULTIMATE_FLUID_TANK, "§d终极 液体储罐");
+        builder.add(ModBlocks.BASIC_FLUID_TANK, "基础 液体储罐");
+        builder.add(ModBlocks.ADVANCED_FLUID_TANK, "高级 液体储罐");
+        builder.add(ModBlocks.ELITE_FLUID_TANK, "精英 液体储罐");
+        builder.add(ModBlocks.ULTIMATE_FLUID_TANK, "终极 液体储罐");
         builder.add(ModBlocks.CREATIVE_FLUID_TANK, "创造 液体储罐");
         builder.add(ModBlocks.BASIC_MECHANICAL_PIPE, "§a基础 机械管道");
         builder.add(ModBlocks.ADVANCED_MECHANICAL_PIPE, "§c高级 机械管道");

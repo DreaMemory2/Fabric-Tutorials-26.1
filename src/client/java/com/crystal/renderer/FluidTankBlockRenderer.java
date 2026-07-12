@@ -1,12 +1,14 @@
 package com.crystal.renderer;
 
-import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.block.entity.tank.FluidTankBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.QuadInstance;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.builders.UVPair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -14,22 +16,18 @@ import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-
-import java.util.List;
+import org.joml.*;
 
 public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull FluidTankBlockEntity, FluidTankBlockRenderer.@NotNull TankRenderState> {
 
@@ -78,264 +76,146 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
     public static void submitTankFluid(@NotNull SubmitNodeCollector collector, @NotNull PoseStack matrices, TextureAtlasSprite sprite, int color, float fill, int light, int overlay) {
         // 储罐中总体积
         float l = 12f / 16f;
-        // 纹理图的位置
-        float y1 = 2f / 16f;
-        float y2 = fill * l + y1;
-        float[][] uv = getTextureUV(sprite, y1, y2);
-        // 轻微偏移，防止图层叠加
-        Vector3fc[][] vec = new FluidSquare(2.01f / 16f, y1, 2.01f / 16f, y2).getVec();
+        // 纹理图的高度位置
+        float minY = 2f / 16f;
+        float maxY = fill * (14f / 16f);
+        // 设置液体颜色着色：例如水的不同群系中颜色，其中岩浆液体颜色为-1
+        QuadInstance instance = new QuadInstance();
+        instance.setColor(color);
 
         matrices.pushPose();
-
-        collector.submitCustomGeometry(matrices, RenderTypes.entityTranslucentEmissive(sprite.atlasLocation()), (pose, vertexConsumer) -> {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    vertexConsumer.addVertex(pose, vec[i][j])
-                            .setColor(color)
-                            .setUv(uv[j][0], uv[j][1])
-                            .setLight(light)
-                            .setOverlay(overlay)
-                            .setNormal(pose, FluidSquare.getDirectionVec()[i]);
-                }
-            }
+        // 截取液体精灵图中的纹理（防止纹理拉深、变形）
+        float v0 = sprite.getV(minY);
+        float v1 = sprite.getV(maxY);
+        float u0 = sprite.getU(2f / 16f);
+        float u1 = sprite.getU(12f / 16f);
+        // 绘制液体纹理四个面（东南西北）+顶面
+        collector.submitCustomGeometry(matrices, Sheets.translucentBlockSheet(), (pose, vertex) -> {
+            east(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
+            south(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
+            west(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
+            north(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
+            if (fill < 1)
+                up(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
         });
-
-        // 绘制顶部（当液体未装满整个容器时）
-        if (fill < 1) {
-            float minU = sprite.getU(2f / 16f);
-            float maxU = sprite.getU(14f / 16f);
-            float minV = sprite.getV(2f / 16f);
-            float maxV = sprite.getV(14f / 16f);
-
-            collector.submitCustomGeometry(matrices, RenderTypes.entityTranslucentEmissive(sprite.atlasLocation()), (pose, vertexConsumer) -> {
-                vertexConsumer.addVertex(pose, 2f / 16f, y2, 2f / 16f)
-                        .setColor(color)
-                        .setUv(minU, maxV)
-                        .setLight(light)
-                        .setOverlay(overlay)
-                        .setNormal(pose, 0, 1, 0);
-                vertexConsumer.addVertex(pose, 2f / 16f, y2, 14f / 16f)
-                        .setColor(color)
-                        .setUv(minU, minV)
-                        .setLight(light)
-                        .setOverlay(overlay)
-                        .setNormal(pose, 0, 1, 0);
-                vertexConsumer.addVertex(pose, 14f / 16f, y2, 14f / 16f)
-                        .setColor(color)
-                        .setUv(maxU, minV)
-                        .setLight(light)
-                        .setOverlay(overlay)
-                        .setNormal(pose, 0, 1, 0);
-                vertexConsumer.addVertex(pose, 14f / 16f, y2, 2f / 16f)
-                        .setColor(color)
-                        .setUv(maxU, maxV)
-                        .setLight(light)
-                        .setOverlay(overlay)
-                        .setNormal(pose, 0, 1, 0);
-            });
-        }
 
         matrices.popPose();
     }
 
-    /**
-     * <p>液体方块四个顶点坐标：</p>
-     * <ul>
-     *     <li>左下角(minU, minV)</li>
-     *     <li>左上角(minU, maxV)</li>
-     *     <li>右上角(maxU, maxV)</li>
-     *     <li>右下角(maxU, minV)</li>
-     * </ul>
-     * @param sprite 液体的纹理图
-     * @param y1 最低高度
-     * @param y2 最大高度
-     * @return 液体方块侧面的四个顶点坐标
-     */
-    private static float[][] getTextureUV(TextureAtlasSprite sprite, float y1, float y2) {
-        // 纹理图的大小
-        // u轴
-        float minU = sprite.getU(2f / 16f);
-        float maxU = sprite.getU(12f / 16f);
-        // v轴
-        float minV = sprite.getV(y1);
-        float maxV = sprite.getV(y2);
-        return new float[][] {{minU, minV}, {minU, maxV}, {maxU, maxV}, {maxU, minV}};
+    /* 上部 */
+    private static void up(PoseStack.Pose pose, VertexConsumer vertex, float u0, float v0, float u1, float v1, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+        vertex.putBakedQuad(pose, new BakedQuad(
+                new Vector3f(2f / 16f, y2, 2f / 16f),
+                new Vector3f(2f / 16f, y2, 14f / 16f),
+                new Vector3f(14f / 16f, y2, 14f / 16f),
+                new Vector3f(14f / 16f, y2, 2f / 16f),
+                UVPair.pack(u0, v0),
+                UVPair.pack(u0, v1),
+                UVPair.pack(u1, v1),
+                UVPair.pack(u1, v0),
+                Direction.UP,
+                new BakedQuad.MaterialInfo(
+                        sprite,
+                        ChunkSectionLayer.TRANSLUCENT,
+                        RenderTypes.LINES_TRANSLUCENT,
+                        0,
+                        false,
+                        light
+                )
+        ), instance);
     }
 
-    public static class FluidSquare {
-        private final float x1;
-        private final float x2;
-        private final float y1;
-        private final float y2;
-        private final float z1;
-        private final float z2;
-
-        public FluidSquare(float x, float y, float z, float fillY) {
-            this.x1 = x;
-            this.x2 = x + (11.98f / 16f);
-            this.y1 = y;
-            this.y2 = fillY;
-            this.z1 = z;
-            this.z2 = z + (11.98f / 16f);
-        }
-
-        public static Vector3fc[] getDirectionVec() {
-            return new Vector3fc[] {
-                    Direction.EAST.getUnitVec3f(),
-                    Direction.SOUTH.getUnitVec3f(),
-                    Direction.WEST.getUnitVec3f(),
-                    Direction.NORTH.getUnitVec3f()
-            };
-        }
-
-        public Vector3fc[][] getVec() {
-            return new Vector3fc[][] {
-                    // 东面
-                    {
-                        new Vector3f(x1, y1, z1), // 左下
-                        new Vector3f(x1, y2, z1), // 左上
-                        new Vector3f(x1, y2, z2), // 右上
-                        new Vector3f(x1, y1, z2)  // 右下
-                    },
-                    // 南面
-                    {
-                        new Vector3f(x1, y1, z2), // 左下
-                        new Vector3f(x1, y2, z2), // 左上
-                        new Vector3f(x2, y2, z2), // 右上
-                        new Vector3f(x2, y1, z2)  // 右下
-                    },
-                    // 西面
-                    {
-                        new Vector3f(x2, y1, z1), // 左下
-                        new Vector3f(x2, y2, z1), // 左上
-                        new Vector3f(x2, y2, z2), // 右上
-                        new Vector3f(x2, y1, z2)  // 右下
-                    },
-                    // 北面
-                    {
-                        new Vector3f(x1, y1, z1), // 左下
-                        new Vector3f(x1, y2, z1), // 左上
-                        new Vector3f(x2, y2, z1), // 右上
-                        new Vector3f(x2, y1, z1)  // 右下
-                    }
-            };
-        }
+    /* 南面 */
+    private static void south(PoseStack.Pose pose, VertexConsumer vertex, float u0, float v0, float u1, float v1, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+        vertex.putBakedQuad(pose, new BakedQuad(
+                new Vector3f(12f / 16f, 2f / 16f, 13.99f / 16f),
+                new Vector3f(12f / 16f, y2, 13.99f / 16f),
+                new Vector3f(4f / 16f, y2, 13.99f / 16f),
+                new Vector3f(4f / 16f, 2f / 16f, 13.99f / 16f),
+                UVPair.pack(u0, v0),
+                UVPair.pack(u0, v1),
+                UVPair.pack(u1, v1),
+                UVPair.pack(u1, v0),
+                Direction.NORTH,
+                new BakedQuad.MaterialInfo(
+                        sprite,
+                        ChunkSectionLayer.TRANSLUCENT,
+                        RenderTypes.LINES_TRANSLUCENT,
+                        0,
+                        false,
+                        light
+                )
+        ), instance);
     }
 
-    // 其他方案
-    public static void drawQuad(Direction direction, VertexConsumer consumer, Matrix4f modelMatrix, PoseStack.Pose normalMatrix, TextureAtlasSprite sprite, int color, int light, int overlay) {
-        // Define the vertices of the quad based on the direction it's facing
-
-        var normal = direction.step();
-
-        var positions = getQuadVerticesByDirection(direction);
-
-        for (int i = positions.length - 1; i >= 0; i--) {
-
-            var pos = positions[i];
-            var u = sprite.getU(getFrameU()[i]);
-            var v = sprite.getV(getFrameV()[i]);
-
-            consumer.addVertex(modelMatrix, pos[0], pos[1], pos[2])
-                    .setColor(color)
-                    .setUv(u, v)
-                    .setLight(light)
-                    .setOverlay(overlay)
-                    .setNormal(normalMatrix, normal.x, normal.y, normal.z);
-        }
-
+    /* 东面 */
+    private static void east(PoseStack.Pose pose, VertexConsumer vertex, float u0, float v0, float u1, float v1, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+        vertex.putBakedQuad(pose, new BakedQuad(
+                new Vector3f(13.99f / 16f, 2f/ 16f, 4f / 16f),
+                new Vector3f(13.99f / 16f, y2, 4f / 16f),
+                new Vector3f(13.99f / 16f, y2, 12f / 16f),
+                new Vector3f(13.99f / 16f, 2f / 16f, 12f / 16f),
+                UVPair.pack(u0, v0),
+                UVPair.pack(u0, v1),
+                UVPair.pack(u1, v1),
+                UVPair.pack(u1, v0),
+                Direction.NORTH.getOpposite(),
+                new BakedQuad.MaterialInfo(
+                        sprite,
+                        ChunkSectionLayer.TRANSLUCENT,
+                        RenderTypes.LINES_TRANSLUCENT,
+                        0,
+                        false,
+                        light
+                )
+        ), instance);
     }
 
-    private static float[] getFrameU() {
-        return new float[]{0, 1, 1, 0};
+    /* 北面 */
+    private static void north(PoseStack.Pose pose, VertexConsumer vertex, float u0, float v0, float u1, float v1, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+
+        vertex.putBakedQuad(pose, new BakedQuad(
+                new Vector3f(4f / 16f, 2f / 16f, 2.01f / 16f),
+                new Vector3f(4f / 16f, y2, 2.01f / 16f),
+                new Vector3f(12f / 16f, y2, 2.01f / 16f),
+                new Vector3f(12f / 16f, 2f / 16f, 2.01f / 16f),
+                UVPair.pack(u0, v0),
+                UVPair.pack(u0, v1),
+                UVPair.pack(u1, v1),
+                UVPair.pack(u1, v0),
+                Direction.NORTH.getOpposite(),
+                new BakedQuad.MaterialInfo(
+                        sprite,
+                        ChunkSectionLayer.TRANSLUCENT,
+                        RenderTypes.LINES_TRANSLUCENT,
+                        0,
+                        false,
+                        light
+                )
+        ), instance);
     }
 
-    private static float[] getFrameV() {
-        return new float[]{0, 0, 1, 1};
-    }
-
-    private static float[][] getQuadVerticesByDirection(Direction direction) {
-        // Define the vertices for each face of the cube
-        return switch (direction) {
-            case UP -> new float[][]{
-                    {0, 1, 0}, // Top-left
-                    {1, 1, 0}, // Top-right
-                    {1, 1, 1}, // Bottom-right
-                    {0, 1, 1}  // Bottom-left
-            };
-            case DOWN -> new float[][]{
-                    {0, 0, 1}, // Top-left
-                    {1, 0, 1}, // Top-right
-                    {1, 0, 0}, // Bottom-right
-                    {0, 0, 0}  // Bottom-left
-            };
-            case NORTH -> new float[][]{
-                    {1, 1, 0}, // Top-left
-                    {0, 1, 0}, // Top-right
-                    {0, 0, 0}, // Bottom-right
-                    {1, 0, 0}  // Bottom-left
-            };
-            case SOUTH -> new float[][]{
-                    {0, 1, 1}, // Top-left
-                    {1, 1, 1}, // Top-right
-                    {1, 0, 1}, // Bottom-right
-                    {0, 0, 1}  // Bottom-left
-            };
-            case WEST -> new float[][]{
-                    {0, 1, 0}, // Top-left
-                    {0, 1, 1}, // Top-right
-                    {0, 0, 1}, // Bottom-right
-                    {0, 0, 0}  // Bottom-left
-            };
-            case EAST -> new float[][]{
-                    {1, 1, 1}, // Top-left
-                    {1, 1, 0}, // Top-right
-                    {1, 0, 0}, // Bottom-right
-                    {1, 0, 1}  // Bottom-left
-            };
-        };
-    }
-
-    /**
-     * A single resolved fluid box to draw, expressed in the model space used by the host renderer.
-     * Used by the refinery renderers to ship their fluid geometry through the GeckoLib DataTicket mechanism.
-     *
-     * @param min      the lower corner of the box (in 1/16th model units, matching the original constants)
-     * @param size     the box dimensions
-     * @param fill     0..1 fill level (scales the height)
-     * @param sprite   the still fluid sprite
-     * @param color    the ARGB tint
-     * @param rotation an optional rotation applied around the model origin before translating to {@code min}
-     */
-    public record FluidCube(Vector3f min, Vector3f size, float fill, TextureAtlasSprite sprite, int color,
-                            @Nullable Quaternionf rotation) {
-    }
-
-    /**
-     * Emits a list of {@link FluidCube}s into the NeoForge 26.1 submit pipeline. Each cube is submitted as its own
-     * custom-geometry node (the collector snapshots the pose at submit time), so per-cube transforms are independent.
-     */
-    public static void submitFluidCubes(SubmitNodeCollector collector, PoseStack poseStack, List<FluidCube> cubes, int light, int overlay) {
-        for (var cube : cubes) {
-            poseStack.pushPose();
-
-            if (cube.rotation() != null) poseStack.mulPose(cube.rotation());
-
-            poseStack.translate(cube.min().x + 0.01f, cube.min().y + 0.01f, cube.min().z + 0.01f);
-            poseStack.scale(cube.size().x - 0.02f, cube.size().y * cube.fill() - 0.03f, cube.size().z - 0.02f);
-
-            var sprite = cube.sprite();
-            var color = cube.color();
-
-            collector.submitCustomGeometry(poseStack, Sheets.translucentBlockSheet(), (pose, consumer) -> {
-                for (Direction direction : Direction.values()) {
-                    if (direction.equals(Direction.DOWN)) continue; // skip bottom, as it's never visible
-                    drawQuad(direction, consumer, pose.pose(), pose, sprite, color, light, overlay);
-                }
-            });
-
-            poseStack.popPose();
-        }
+    /* 西面 */
+    public static void west(PoseStack.Pose pose, VertexConsumer vertex, float u0, float v0, float u1, float v1, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+        vertex.putBakedQuad(pose, new BakedQuad(
+                new Vector3f(2.01f / 16f, 2f / 16f, 12f / 16f),
+                new Vector3f(2.01f / 16f, y2, 12f / 16f),
+                new Vector3f(2.01f / 16f, y2, 4f / 16f),
+                new Vector3f(2.01f / 16f, 2f / 16f, 4f / 16f),
+                UVPair.pack(u0, v0),
+                UVPair.pack(u0, v1),
+                UVPair.pack(u1, v1),
+                UVPair.pack(u1, v0),
+                Direction.NORTH.getOpposite(),
+                new BakedQuad.MaterialInfo(
+                        sprite,
+                        ChunkSectionLayer.TRANSLUCENT,
+                        RenderTypes.LINES_TRANSLUCENT,
+                        0,
+                        false,
+                        light
+                )
+        ), instance);
     }
 
     public static class TankRenderState extends BlockEntityRenderState {

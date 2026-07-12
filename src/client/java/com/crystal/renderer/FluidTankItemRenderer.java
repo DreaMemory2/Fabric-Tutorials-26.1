@@ -27,6 +27,18 @@ import org.joml.Vector3fc;
 import java.util.function.Consumer;
 
 /**
+ * <p>通过设置特殊模型渲染，渲染方块物品中液体显示</p>
+ * <p>例如：显示基础液体储罐的模型中液体渲染</p>
+ * <pre><code>
+ * {
+ *   "type": "minecraft:special",
+ *   "base": "crystalmod:item/basic_fluid_tank",
+ *   "model": {
+ *     "type": "crystalmod:fluid_tank"
+ *   }
+ * }
+ * </code></pre>
+ * @see <a href="https://zh.minecraft.wiki/w/物品模型映射#special">特殊模型</a>
  * @see <a href="https://github.com/Rearth/Oritech/blob/26.1/src/main/java/rearth/oritech/client/renderers/SmallTankItemRenderer.java">SmallTankItemRenderer</a>
  */
 public class FluidTankItemRenderer implements SpecialModelRenderer<FluidTankItemRenderer.TankContents> {

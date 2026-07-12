@@ -1,7 +1,7 @@
 package com.crystal.screen;
 
 import com.crystal.CrystalMod;
-import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.block.entity.tank.FluidTankBlockEntity;
 import com.crystal.screenhandler.FluidTankScreenHandler;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -25,7 +25,7 @@ public class FluidTankScreen extends AbstractContainerScreen<@NotNull FluidTankS
         super.init();
         // 设置标题在容器页面的中心位置上
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
-
+        // 添加液体渲染组件
         FluidTankBlockEntity blockEntity = this.menu.getBlockEntity();
         this.addRenderableWidget(FluidWidget.builder(blockEntity.getFluidTank()).position(this.leftPos + 49, this.topPos + 19).size(65, 47).posSupplier(blockEntity::getBlockPos).build());
     }

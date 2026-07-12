@@ -1,6 +1,6 @@
 package com.crystal.screenhandler;
 
-import com.crystal.block.entity.FluidTankBlockEntity;
+import com.crystal.block.entity.tank.FluidTankBlockEntity;
 import com.crystal.network.BlockPosPayload;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -28,7 +28,7 @@ public class FluidTankScreenHandler extends AbstractContainerMenu {
         this.container = container;
         this.blockEntity = blockEntity;
         checkContainerSize(container, 2);
-        // 添加输入槽
+        // 添加液体输入槽
         this.addSlot(new Slot(container, 0, 143, 19) {
             /**
              * 调用{@code inventory}中的{@link Inventory#canPlaceItem(int slot, ItemStack stack)}方法
@@ -38,7 +38,7 @@ public class FluidTankScreenHandler extends AbstractContainerMenu {
                 return container.canPlaceItem(0, stack);
             }
         });
-        // 添加输出槽
+        // 添加液体输出槽
         this.addSlot(new Slot(container, 1, 143, 50));
         // 物品栏
         this.addStandardInventorySlots(playerInventory, 8, 84);

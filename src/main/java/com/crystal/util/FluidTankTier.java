@@ -19,12 +19,12 @@ public enum FluidTankTier {
         this.capacity = capacity;
     }
 
-    public int getColor() {
-        return color;
-    }
-
     public int getColor(String name) {
         return FluidTankTier.valueOf(name.toUpperCase()).getColor();
+    }
+
+    public int getColor() {
+        return this.color;
     }
 
     public long getCapacity() {

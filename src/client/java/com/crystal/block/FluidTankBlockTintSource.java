@@ -6,6 +6,10 @@ import net.minecraft.util.ARGB;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.NonNull;
 
+/**
+ * <p>渲染液体存储方块上刻度线的颜色</p>
+ * @see com.crystal.item.FluidTankItemTintSource FluidTankItemTintSource
+ */
 public class FluidTankBlockTintSource implements BlockTintSource {
     @Override
     public int color(@NonNull BlockState state) {

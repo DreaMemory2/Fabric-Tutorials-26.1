@@ -53,6 +53,6 @@ public class ModModelDataGenerator extends FabricModelProvider {
         FluidTankItemRenderer.Unbaked unbaked = new FluidTankItemRenderer.Unbaked();
         ItemModel.Unbaked tintedModel = ItemModelUtils.tintedModel(ModelLocationUtils.getModelLocation(item), new FluidTankItemTintSource(color));
         ItemModel.Unbaked fluidTankUnbaked = ItemModelUtils.specialModel(ModelLocationUtils.getModelLocation(item), unbaked);
-        model.itemModelOutput.accept(item, ItemModelUtils.composite(fluidTankUnbaked, tintedModel));
+        model.itemModelOutput.accept(item, ItemModelUtils.composite(tintedModel, fluidTankUnbaked));
     }
 }
