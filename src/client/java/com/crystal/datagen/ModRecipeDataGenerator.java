@@ -2,7 +2,6 @@ package com.crystal.datagen;
 
 import com.crystal.CrystalMod;
 import com.crystal.block.ModBlocks;
-import com.crystal.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
@@ -14,7 +13,6 @@ import net.minecraft.data.recipes.TransmuteRecipeBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.TransmuteRecipe;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
