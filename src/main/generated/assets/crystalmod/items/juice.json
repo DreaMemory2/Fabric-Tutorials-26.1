@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "crystalmod:item/juice",
+    "tints": [
+      {
+        "type": "crystalmod:juice",
+        "color": -13083194
+      }
+    ]
+  }
+}

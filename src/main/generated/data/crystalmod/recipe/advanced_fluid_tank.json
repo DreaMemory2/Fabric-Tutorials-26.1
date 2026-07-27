@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "fluid_tank",
+  "input": "crystalmod:basic_fluid_tank",
+  "material": "minecraft:red_dye",
+  "result": {
+    "id": "crystalmod:advanced_fluid_tank"
+  }
+}

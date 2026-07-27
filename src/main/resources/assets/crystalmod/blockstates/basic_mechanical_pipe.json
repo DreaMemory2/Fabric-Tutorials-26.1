@@ -1,0 +1,67 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe_hside",
+        "uvlock": true
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe_hside",
+        "uvlock": false,
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe_hside",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe_hside",
+        "uvlock": false,
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe_vside",
+        "uvlock": false
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "crystalmod:block/basic_mechanical_pipe_vside",
+        "uvlock": false,
+        "x": 180
+      },
+      "when": {
+        "down": "true"
+      }
+    }
+  ]
+}

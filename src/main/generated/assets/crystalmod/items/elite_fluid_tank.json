@@ -1,0 +1,24 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "crystalmod:item/elite_fluid_tank",
+        "tints": [
+          {
+            "type": "crystalmod:fluid_tank",
+            "color": 4978943
+          }
+        ]
+      },
+      {
+        "type": "minecraft:special",
+        "base": "crystalmod:item/elite_fluid_tank",
+        "model": {
+          "type": "crystalmod:fluid_tank"
+        }
+      }
+    ]
+  }
+}

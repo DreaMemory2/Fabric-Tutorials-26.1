@@ -1,0 +1,7 @@
+{
+  "parent": "crystalmod:block/mechanical_pipe_hside",
+  "textures": {
+    "pipe": "crystalmod:block/pipe/mechanical/basic_mechanical_pipe_side",
+    "particle": "crystalmod:block/pipe/mechanical/basic_mechanical_pipe"
+  }
+}

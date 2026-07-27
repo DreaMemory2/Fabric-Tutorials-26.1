@@ -58,19 +58,21 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
 
         Storage<FluidVariant> input = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(0)).find(FluidStorage.ITEM);
         Storage<FluidVariant> output = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(1)).find(FluidStorage.ITEM);
+        ContainerItemContext context = ContainerItemContext.ofSingleSlot(inventoryStorage.getSlot(1));
 
-        if (input != null) {
-            // 输入液体
-            inputFluid(input);
-        } else if (output != null) {
-            // 输出液体
-            outputFluid(output);
-        }
+        /*--- 输入液体 ---*/
+        if (input != null) inputFluid(input);
+
+        /*--- 输出液体 ---*/
+        if (output != null) outputFluid(output);
     }
 
     private void inputFluid(Storage<FluidVariant> itemFluidStorage) {
         for (StorageView<FluidVariant> view : itemFluidStorage.nonEmptyViews()) {
-            if (view.isResourceBlank()) continue;
+            // 判断输入的液体是否与容器内液体相同
+            if (!this.fluidStorage.isResourceBlank()
+                    && !view.getResource().isOf(this.fluidStorage.getResource().getFluid())) return;
+
             try(Transaction transaction = Transaction.openOuter()) {
                 FluidVariant variant = view.getResource();
                 long extract = itemFluidStorage.extract(variant, FluidConstants.BUCKET, transaction);
@@ -82,8 +84,13 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
     }
 
     private void outputFluid(Storage<FluidVariant> itemFluidStorage) {
+        // 判断输入物品是否含有可提取的液体
+        for (StorageView<FluidVariant> view : itemFluidStorage)
+            if (!view.isResourceBlank()) return;
+        // 是否输入两个或两个以上的物品
+        if (this.items.get(1).getCount() >= 2) return;
+
         for (StorageView<FluidVariant> view : fluidStorage.nonEmptyViews()) {
-            if (view.isResourceBlank()) continue;
             try(Transaction transaction = Transaction.openOuter()) {
                 FluidVariant resource = view.getResource();
                 long extract = this.fluidStorage.extract(resource, FluidConstants.BUCKET, transaction);
@@ -105,7 +112,8 @@ public class FluidTankBlockEntity extends BaseContainerBlockEntity implements Ti
         // 例如：检查输入槽是否为空桶或输入槽为空槽
         if (stack.isEmpty()) return true;
         // 除了输入槽（下标为0）之外均无无效
-        if (slot != 0) return false;
+        if (slot == 0) return true;
+        if (slot == 1) return true;
         // 对液体存储物品访问，也就是说，从输入槽中物品提取液体，液体按照滴为单位存储
         // 例如：输出槽位中有水桶，从水桶中提取液体，能提取81000水滴
         Storage<FluidVariant> storage = ContainerItemContext.withConstant(stack).find(FluidStorage.ITEM);

@@ -1,0 +1,9 @@
+{
+  "values": [
+    "crystalmod:basic_fluid_tank",
+    "crystalmod:advanced_fluid_tank",
+    "crystalmod:elite_fluid_tank",
+    "crystalmod:ultimate_fluid_tank",
+    "crystalmod:creative_fluid_tank"
+  ]
+}

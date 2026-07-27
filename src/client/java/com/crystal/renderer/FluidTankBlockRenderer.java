@@ -96,14 +96,19 @@ public class FluidTankBlockRenderer implements BlockEntityRenderer<@NotNull Flui
             west(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
             north(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
             if (fill < 1)
-                up(pose, vertex, u0, v0, u1, v1, sprite, instance, light, maxY);
+                up(pose, vertex, sprite, instance, light, maxY);
         });
 
         matrices.popPose();
     }
 
     /* 上部 */
-    private static void up(PoseStack.Pose pose, VertexConsumer vertex, float u0, float v0, float u1, float v1, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+    private static void up(PoseStack.Pose pose, VertexConsumer vertex, TextureAtlasSprite sprite, QuadInstance instance, int light, float y2) {
+        float v0 = sprite.getV(2f / 16f);
+        float v1 = sprite.getV(12f / 16f);
+        float u0 = sprite.getU(2f / 16f);
+        float u1 = sprite.getU(12f / 16f);
+
         vertex.putBakedQuad(pose, new BakedQuad(
                 new Vector3f(2f / 16f, y2, 2f / 16f),
                 new Vector3f(2f / 16f, y2, 14f / 16f),
